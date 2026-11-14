@@ -1,0 +1,32 @@
+{
+  "team_number": "T0018",
+  "group_lead": {
+    "name": "Aditya Choudhary",
+    "enrollment_no": "2501010616",
+    "github": "adityach474-pixel"
+  },
+  "members": [
+    {
+      "name": "Aditya Choudhary",
+      "enrollment_no": "2501010616",
+      "github": "adityach474-pixel"
+    },
+    {
+      "name": "Vansh Malik",
+      "enrollment_no": "2501010601",
+      "github": "vanshmalik303"
+    },
+    {
+      "name": "Yatharth Khandelwal",
+      "enrollment_no": "2501010530",
+      "github": "Heyykrishnna"
+    },
+    {
+      "name": "Mihir Sahu",
+      "enrollment_no": "2501010666",
+      "github": "MihirSahu2710"
+    }
+  ],
+  "postgres_version": "18.6",
+  "laptop_used_for_benchmarks": "Macbook Pro M4"
+}
