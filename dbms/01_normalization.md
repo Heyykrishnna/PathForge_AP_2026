@@ -181,4 +181,52 @@ Functional Dependencies:
 
 ---
 
-*(Sections 4–7 continued in next commit)*
+## 4. Second Normal Form (2NF)
+
+### 4.1 Definition of 2NF
+
+A relation is in Second Normal Form (2NF) if and only if:
+
+1. It is in First Normal Form (1NF).
+2. No non-prime attribute is partially dependent on any candidate key of the relation. That is, every non-prime attribute must be fully functionally dependent on the entire primary key.
+
+### 4.2 Decomposing Partial Dependencies
+
+We identify all relations with composite primary keys and isolate attributes that depend on only a subset of that key.
+
+#### Decomposition of `R1_STUDENT_PROJECTS`:
+
+- Candidate Key: `(project_id, skill_name)`
+- Partial Dependency: `project_id → user_id, project_title, project_desc, repo_url, demo_url`
+- Decomposition:
+  - `R2_PROJECTS(project_id, user_id, project_title, project_desc, repo_url, demo_url)`
+    - PK: `project_id`
+    - FD: `project_id → user_id, project_title, project_desc, repo_url, demo_url`
+  - `R2_PROJECT_SKILLS(project_id, skill_id)`
+    - PK: `(project_id, skill_id)`
+    - Full dependency: both parts of key are required.
+
+#### Decomposition of `R1_ROADMAP_TASKS`:
+
+- Candidate Key: `(roadmap_id, task_id)`
+- Partial Dependency: `roadmap_id → evaluation_id, user_id, roadmap_title`
+- Decomposition:
+  - `R2_ROADMAPS(roadmap_id, evaluation_id, user_id, roadmap_title, status, created_at)`
+    - PK: `roadmap_id`
+    - FD: `roadmap_id → evaluation_id, user_id, roadmap_title, status, created_at`
+  - `R2_ROADMAP_TASKS(task_id, roadmap_id, day_number, task_title, task_focus, task_outcome, estimated_minutes, is_completed)`
+    - PK: `task_id`
+    - Foreign Key: `roadmap_id`
+    - Full dependency: `task_id → roadmap_id, day_number, task_title, ...`
+
+### 4.3 Anomalies Remaining in 2NF
+
+Although partial dependencies are eliminated, **transitive dependencies** remain:
+
+- In `R1_INTERNSHIP_CATALOG`: `internship_id → company_id` and `company_id → company_name, company_website, company_industry`. Non-prime company attributes depend transitively on `internship_id`.
+- In `R1_USER_PROFILE`: `user_id` determines authentication credentials and profile information, but users may have distinct profiles or role-specific attributes.
+- In `R1_STUDENT_SKILLS` and `R1_INTERNSHIP_REQUIREMENTS`: `skill_name → skill_category` represents a transitive dependency where non-key attributes determine other non-key attributes.
+
+---
+
+*(Sections 5–7 continued in next commit)*
