@@ -1,0 +1,441 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2160 1280" width="2160" height="1280" style="background:#0f172a; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.4"/>
+    </filter>
+    <linearGradient id="header-identity" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="header-skills" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+    <linearGradient id="header-jobs" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="header-eval" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+    <linearGradient id="header-action" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#be185d"/>
+    </linearGradient>
+    <linearGradient id="header-track" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="100%" stop-color="#0e7490"/>
+    </linearGradient>
+  </defs>
+
+  <text x="1080" y="38" text-anchor="middle" fill="#f8fafc" font-size="24" font-weight="700" letter-spacing="1">PATHFORGE RELATIONAL DATABASE ARCHITECTURE (POSTGRESQL 18)</text>
+  <text x="1080" y="60" text-anchor="middle" fill="#94a3b8" font-size="13">18 Normalized Relational Tables in BCNF (1:1, 1:N, M:N Relationships with Strict Keys &amp; Constraints)</text>
+
+  <!-- Legend -->
+  <g transform="translate(40, 80)">
+    <rect width="2080" height="36" rx="6" fill="#1e293b" stroke="#334155"/>
+    <circle cx="25" cy="18" r="6" fill="#3b82f6"/>
+    <text x="38" y="22" fill="#cbd5e1" font-size="12" font-weight="600">Identity &amp; Profile</text>
+    <circle cx="210" cy="18" r="6" fill="#10b981"/>
+    <text x="223" y="22" fill="#cbd5e1" font-size="12" font-weight="600">Skills &amp; Projects</text>
+    <circle cx="410" cy="18" r="6" fill="#f59e0b"/>
+    <text x="423" y="22" fill="#cbd5e1" font-size="12" font-weight="600">Internships &amp; Requirements</text>
+    <circle cx="660" cy="18" r="6" fill="#8b5cf6"/>
+    <text x="673" y="22" fill="#cbd5e1" font-size="12" font-weight="600">Diagnostics &amp; Evaluation</text>
+    <circle cx="910" cy="18" r="6" fill="#ec4899"/>
+    <text x="923" y="22" fill="#cbd5e1" font-size="12" font-weight="600">Actionable Preparation</text>
+    <circle cx="1140" cy="18" r="6" fill="#06b6d4"/>
+    <text x="1153" y="22" fill="#cbd5e1" font-size="12" font-weight="600">Application Pipeline</text>
+    <text x="1800" y="22" fill="#94a3b8" font-size="11">PK = Primary Key | FK = Foreign Key | UK = Unique Key</text>
+  </g>
+
+  <!-- Entity 1: users -->
+  <g transform="translate(40, 140)" filter="url(#shadow)">
+    <rect width="280" height="190" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="280" height="34" rx="8" fill="url(#header-identity)"/>
+    <rect width="280" height="10" y="24" fill="url(#header-identity)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">users</text>
+    <text x="266" y="22" fill="#dbeafe" font-size="11" text-anchor="end">Identity</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK </tspan>user_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#38bdf8" font-weight="bold">UK </tspan>email: <tspan fill="#94a3b8">VARCHAR(255)</tspan></text>
+      <text y="40">password_hash: <tspan fill="#94a3b8">VARCHAR(255)</tspan></text>
+      <text y="60">user_role: <tspan fill="#94a3b8">VARCHAR(20)</tspan></text>
+      <text y="80">is_active: <tspan fill="#94a3b8">BOOLEAN</tspan></text>
+      <text y="100">created_at: <tspan fill="#94a3b8">TIMESTAMPTZ</tspan></text>
+      <text y="120">updated_at: <tspan fill="#94a3b8">TIMESTAMPTZ</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 2: student_profiles -->
+  <g transform="translate(380, 140)" filter="url(#shadow)">
+    <rect width="300" height="320" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="300" height="34" rx="8" fill="url(#header-identity)"/>
+    <rect width="300" height="10" y="24" fill="url(#header-identity)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">student_profiles</text>
+    <text x="286" y="22" fill="#dbeafe" font-size="11" text-anchor="end">1:1 Profile</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK </tspan>student_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#f43f5e" font-weight="bold">FK,UK </tspan>user_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="40">full_name: <tspan fill="#94a3b8">VARCHAR(120)</tspan></text>
+      <text y="60">phone: <tspan fill="#94a3b8">VARCHAR(20)</tspan></text>
+      <text y="80">headline: <tspan fill="#94a3b8">VARCHAR(255)</tspan></text>
+      <text y="100">bio: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="120">target_role: <tspan fill="#94a3b8">VARCHAR(100)</tspan></text>
+      <text y="140">university: <tspan fill="#94a3b8">VARCHAR(255)</tspan></text>
+      <text y="160">degree: <tspan fill="#94a3b8">VARCHAR(100)</tspan></text>
+      <text y="180">graduation_year: <tspan fill="#94a3b8">INT</tspan></text>
+      <text y="200">cgpa: <tspan fill="#94a3b8">NUMERIC(4,2)</tspan></text>
+      <text y="220">github_username: <tspan fill="#94a3b8">VARCHAR(100)</tspan></text>
+      <text y="240">portfolio_url: <tspan fill="#94a3b8">VARCHAR(500)</tspan></text>
+      <text y="260">linkedin_url: <tspan fill="#94a3b8">VARCHAR(500)</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 3: resumes -->
+  <g transform="translate(740, 140)" filter="url(#shadow)">
+    <rect width="280" height="190" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="280" height="34" rx="8" fill="url(#header-identity)"/>
+    <rect width="280" height="10" y="24" fill="url(#header-identity)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">resumes</text>
+    <text x="266" y="22" fill="#dbeafe" font-size="11" text-anchor="end">Documents</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK </tspan>resume_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#f43f5e" font-weight="bold">FK </tspan>student_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="40">file_url: <tspan fill="#94a3b8">VARCHAR(500)</tspan></text>
+      <text y="60">raw_text: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="80">parsed_data: <tspan fill="#94a3b8">JSONB</tspan></text>
+      <text y="100">is_active: <tspan fill="#94a3b8">BOOLEAN</tspan></text>
+      <text y="120">uploaded_at: <tspan fill="#94a3b8">TIMESTAMPTZ</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 4: skills -->
+  <g transform="translate(380, 500)" filter="url(#shadow)">
+    <rect width="280" height="190" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="280" height="34" rx="8" fill="url(#header-skills)"/>
+    <rect width="280" height="10" y="24" fill="url(#header-skills)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">skills</text>
+    <text x="266" y="22" fill="#a7f3d0" font-size="11" text-anchor="end">Taxonomy</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK </tspan>skill_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#38bdf8" font-weight="bold">UK </tspan>name: <tspan fill="#94a3b8">VARCHAR(100)</tspan></text>
+      <text y="40"><tspan fill="#38bdf8" font-weight="bold">UK </tspan>slug: <tspan fill="#94a3b8">VARCHAR(100)</tspan></text>
+      <text y="60">category: <tspan fill="#94a3b8">VARCHAR(50)</tspan></text>
+      <text y="80">description: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="100">created_at: <tspan fill="#94a3b8">TIMESTAMPTZ</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 5: student_skills -->
+  <g transform="translate(40, 500)" filter="url(#shadow)">
+    <rect width="280" height="210" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="280" height="34" rx="8" fill="url(#header-skills)"/>
+    <rect width="280" height="10" y="24" fill="url(#header-skills)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">student_skills</text>
+    <text x="266" y="22" fill="#a7f3d0" font-size="11" text-anchor="end">M:N Junction</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK,FK </tspan>student_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#eab308" font-weight="bold">PK,FK </tspan>skill_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="40">proficiency: <tspan fill="#94a3b8">VARCHAR(20)</tspan></text>
+      <text y="60">verification_source: <tspan fill="#94a3b8">VARCHAR(30)</tspan></text>
+      <text y="80">years_experience: <tspan fill="#94a3b8">NUMERIC(3,1)</tspan></text>
+      <text y="100">is_verified: <tspan fill="#94a3b8">BOOLEAN</tspan></text>
+      <text y="120">created_at: <tspan fill="#94a3b8">TIMESTAMPTZ</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 6: projects -->
+  <g transform="translate(40, 760)" filter="url(#shadow)">
+    <rect width="280" height="250" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="280" height="34" rx="8" fill="url(#header-skills)"/>
+    <rect width="280" height="10" y="24" fill="url(#header-skills)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">projects</text>
+    <text x="266" y="22" fill="#a7f3d0" font-size="11" text-anchor="end">Portfolio</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK </tspan>project_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#f43f5e" font-weight="bold">FK </tspan>student_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="40">title: <tspan fill="#94a3b8">VARCHAR(200)</tspan></text>
+      <text y="60">description: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="80">repo_url: <tspan fill="#94a3b8">VARCHAR(500)</tspan></text>
+      <text y="100">demo_url: <tspan fill="#94a3b8">VARCHAR(500)</tspan></text>
+      <text y="120">start_date: <tspan fill="#94a3b8">DATE</tspan></text>
+      <text y="140">end_date: <tspan fill="#94a3b8">DATE</tspan></text>
+      <text y="160">is_featured: <tspan fill="#94a3b8">BOOLEAN</tspan></text>
+      <text y="180">created_at: <tspan fill="#94a3b8">TIMESTAMPTZ</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 7: project_skills -->
+  <g transform="translate(380, 760)" filter="url(#shadow)">
+    <rect width="260" height="130" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="260" height="34" rx="8" fill="url(#header-skills)"/>
+    <rect width="260" height="10" y="24" fill="url(#header-skills)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">project_skills</text>
+    <text x="246" y="22" fill="#a7f3d0" font-size="11" text-anchor="end">Stack</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK,FK </tspan>project_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#eab308" font-weight="bold">PK,FK </tspan>skill_id: <tspan fill="#94a3b8">UUID</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 8: companies -->
+  <g transform="translate(1080, 140)" filter="url(#shadow)">
+    <rect width="280" height="190" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="280" height="34" rx="8" fill="url(#header-jobs)"/>
+    <rect width="280" height="10" y="24" fill="url(#header-jobs)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">companies</text>
+    <text x="266" y="22" fill="#fde68a" font-size="11" text-anchor="end">Employers</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK </tspan>company_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#38bdf8" font-weight="bold">UK </tspan>name: <tspan fill="#94a3b8">VARCHAR(200)</tspan></text>
+      <text y="40">website: <tspan fill="#94a3b8">VARCHAR(500)</tspan></text>
+      <text y="60">logo_url: <tspan fill="#94a3b8">VARCHAR(500)</tspan></text>
+      <text y="80">industry: <tspan fill="#94a3b8">VARCHAR(100)</tspan></text>
+      <text y="100">location: <tspan fill="#94a3b8">VARCHAR(150)</tspan></text>
+      <text y="120">created_at: <tspan fill="#94a3b8">TIMESTAMPTZ</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 9: internships -->
+  <g transform="translate(1420, 140)" filter="url(#shadow)">
+    <rect width="300" height="270" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="300" height="34" rx="8" fill="url(#header-jobs)"/>
+    <rect width="300" height="10" y="24" fill="url(#header-jobs)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">internships</text>
+    <text x="286" y="22" fill="#fde68a" font-size="11" text-anchor="end">Opportunities</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK </tspan>internship_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#f43f5e" font-weight="bold">FK </tspan>company_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="40">title: <tspan fill="#94a3b8">VARCHAR(200)</tspan></text>
+      <text y="60">description: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="80">location: <tspan fill="#94a3b8">VARCHAR(150)</tspan></text>
+      <text y="100">internship_type: <tspan fill="#94a3b8">VARCHAR(20)</tspan></text>
+      <text y="120">stipend_amount: <tspan fill="#94a3b8">NUMERIC(10,2)</tspan></text>
+      <text y="140">deadline: <tspan fill="#94a3b8">DATE</tspan></text>
+      <text y="160">source_url: <tspan fill="#94a3b8">VARCHAR(500)</tspan></text>
+      <text y="180">status: <tspan fill="#94a3b8">VARCHAR(20)</tspan></text>
+      <text y="200">created_at: <tspan fill="#94a3b8">TIMESTAMPTZ</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 10: internship_requirements -->
+  <g transform="translate(1080, 370)" filter="url(#shadow)">
+    <rect width="300" height="230" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="300" height="34" rx="8" fill="url(#header-jobs)"/>
+    <rect width="300" height="10" y="24" fill="url(#header-jobs)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">internship_requirements</text>
+    <text x="286" y="22" fill="#fde68a" font-size="11" text-anchor="end">Requirements</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK </tspan>requirement_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#f43f5e" font-weight="bold">FK </tspan>internship_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="40"><tspan fill="#f43f5e" font-weight="bold">FK </tspan>skill_id: <tspan fill="#94a3b8">UUID (Nullable)</tspan></text>
+      <text y="60">requirement_type: <tspan fill="#94a3b8">VARCHAR(20)</tspan></text>
+      <text y="80">weight: <tspan fill="#94a3b8">NUMERIC(3,2)</tspan></text>
+      <text y="100">min_proficiency: <tspan fill="#94a3b8">VARCHAR(20)</tspan></text>
+      <text y="120">requirement_text: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="140">created_at: <tspan fill="#94a3b8">TIMESTAMPTZ</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 11: evaluations -->
+  <g transform="translate(740, 420)" filter="url(#shadow)">
+    <rect width="300" height="230" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="300" height="34" rx="8" fill="url(#header-eval)"/>
+    <rect width="300" height="10" y="24" fill="url(#header-eval)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">evaluations</text>
+    <text x="286" y="22" fill="#ddd6fe" font-size="11" text-anchor="end">Engine Output</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK </tspan>evaluation_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#f43f5e" font-weight="bold">FK </tspan>student_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="40"><tspan fill="#f43f5e" font-weight="bold">FK </tspan>internship_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="60">compatibility_score: <tspan fill="#94a3b8">NUMERIC(5,2)</tspan></text>
+      <text y="80">coverage_pct: <tspan fill="#94a3b8">NUMERIC(5,2)</tspan></text>
+      <text y="100">scoring_version: <tspan fill="#94a3b8">VARCHAR(30)</tspan></text>
+      <text y="120">summary_notes: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="140">evaluated_at: <tspan fill="#94a3b8">TIMESTAMPTZ</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 12: requirement_assessments -->
+  <g transform="translate(740, 690)" filter="url(#shadow)">
+    <rect width="320" height="270" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="320" height="34" rx="8" fill="url(#header-eval)"/>
+    <rect width="320" height="10" y="24" fill="url(#header-eval)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">requirement_assessments</text>
+    <text x="306" y="22" fill="#ddd6fe" font-size="11" text-anchor="end">Diagnostics</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK </tspan>assessment_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#f43f5e" font-weight="bold">FK,UK </tspan>evaluation_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="40"><tspan fill="#f43f5e" font-weight="bold">FK,UK </tspan>requirement_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="60">match_status: <tspan fill="#94a3b8">VARCHAR(30)</tspan></text>
+      <text y="80">match_value: <tspan fill="#94a3b8">NUMERIC(3,2)</tspan></text>
+      <text y="100">confidence_score: <tspan fill="#94a3b8">NUMERIC(4,2)</tspan></text>
+      <text y="120">evidence_source: <tspan fill="#94a3b8">VARCHAR(30)</tspan></text>
+      <text y="140">evidence_text: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="160">explanation: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="180">created_at: <tspan fill="#94a3b8">TIMESTAMPTZ</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 13: skill_gaps -->
+  <g transform="translate(1120, 640)" filter="url(#shadow)">
+    <rect width="280" height="210" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="280" height="34" rx="8" fill="url(#header-eval)"/>
+    <rect width="280" height="10" y="24" fill="url(#header-eval)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">skill_gaps</text>
+    <text x="266" y="22" fill="#ddd6fe" font-size="11" text-anchor="end">Gaps</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK </tspan>gap_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#f43f5e" font-weight="bold">FK,UK </tspan>evaluation_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="40"><tspan fill="#f43f5e" font-weight="bold">FK,UK </tspan>skill_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="60">priority: <tspan fill="#94a3b8">VARCHAR(20)</tspan></text>
+      <text y="80">reason: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="100">suggested_action: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="120">created_at: <tspan fill="#94a3b8">TIMESTAMPTZ</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 14: bridge_projects -->
+  <g transform="translate(1440, 640)" filter="url(#shadow)">
+    <rect width="300" height="270" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="300" height="34" rx="8" fill="url(#header-action)"/>
+    <rect width="300" height="10" y="24" fill="url(#header-action)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">bridge_projects</text>
+    <text x="286" y="22" fill="#fbcfe8" font-size="11" text-anchor="end">Recommendations</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK </tspan>bridge_project_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#f43f5e" font-weight="bold">FK </tspan>evaluation_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="40"><tspan fill="#f43f5e" font-weight="bold">FK </tspan>gap_id: <tspan fill="#94a3b8">UUID (Nullable)</tspan></text>
+      <text y="60">title: <tspan fill="#94a3b8">VARCHAR(200)</tspan></text>
+      <text y="80">objective: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="100">scope_description: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="120">expected_deliverables: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="140">estimated_effort_hours: <tspan fill="#94a3b8">INT</tspan></text>
+      <text y="160">difficulty: <tspan fill="#94a3b8">VARCHAR(20)</tspan></text>
+      <text y="180">status: <tspan fill="#94a3b8">VARCHAR(20)</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 15: roadmaps -->
+  <g transform="translate(1120, 930)" filter="url(#shadow)">
+    <rect width="280" height="210" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="280" height="34" rx="8" fill="url(#header-action)"/>
+    <rect width="280" height="10" y="24" fill="url(#header-action)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">roadmaps</text>
+    <text x="266" y="22" fill="#fbcfe8" font-size="11" text-anchor="end">7-Day Sprint</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK </tspan>roadmap_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#f43f5e" font-weight="bold">FK </tspan>evaluation_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="40"><tspan fill="#f43f5e" font-weight="bold">FK </tspan>student_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="60">title: <tspan fill="#94a3b8">VARCHAR(200)</tspan></text>
+      <text y="80">total_days: <tspan fill="#94a3b8">INT</tspan></text>
+      <text y="100">status: <tspan fill="#94a3b8">VARCHAR(20)</tspan></text>
+      <text y="120">created_at: <tspan fill="#94a3b8">TIMESTAMPTZ</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 16: roadmap_tasks -->
+  <g transform="translate(1440, 950)" filter="url(#shadow)">
+    <rect width="300" height="270" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="300" height="34" rx="8" fill="url(#header-action)"/>
+    <rect width="300" height="10" y="24" fill="url(#header-action)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">roadmap_tasks</text>
+    <text x="286" y="22" fill="#fbcfe8" font-size="11" text-anchor="end">Daily Tasks</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK </tspan>task_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#f43f5e" font-weight="bold">FK </tspan>roadmap_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="40">day_number: <tspan fill="#94a3b8">INT (1..30)</tspan></text>
+      <text y="60">task_order: <tspan fill="#94a3b8">INT</tspan></text>
+      <text y="80">title: <tspan fill="#94a3b8">VARCHAR(200)</tspan></text>
+      <text y="100">focus_area: <tspan fill="#94a3b8">VARCHAR(200)</tspan></text>
+      <text y="120">expected_outcome: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="140">estimated_minutes: <tspan fill="#94a3b8">INT</tspan></text>
+      <text y="160">is_completed: <tspan fill="#94a3b8">BOOLEAN</tspan></text>
+      <text y="180">completed_at: <tspan fill="#94a3b8">TIMESTAMPTZ</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 17: applications -->
+  <g transform="translate(1800, 350)" filter="url(#shadow)">
+    <rect width="300" height="250" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="300" height="34" rx="8" fill="url(#header-track)"/>
+    <rect width="300" height="10" y="24" fill="url(#header-track)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">applications</text>
+    <text x="286" y="22" fill="#cffafe" font-size="11" text-anchor="end">Tracking</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK </tspan>application_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#f43f5e" font-weight="bold">FK,UK </tspan>student_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="40"><tspan fill="#f43f5e" font-weight="bold">FK,UK </tspan>internship_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="60"><tspan fill="#f43f5e" font-weight="bold">FK </tspan>evaluation_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="80">current_stage: <tspan fill="#94a3b8">VARCHAR(30)</tspan></text>
+      <text y="100">priority: <tspan fill="#94a3b8">VARCHAR(20)</tspan></text>
+      <text y="120">applied_date: <tspan fill="#94a3b8">DATE</tspan></text>
+      <text y="140">notes: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="160">created_at: <tspan fill="#94a3b8">TIMESTAMPTZ</tspan></text>
+    </g>
+  </g>
+
+  <!-- Entity 18: application_activities -->
+  <g transform="translate(1800, 680)" filter="url(#shadow)">
+    <rect width="300" height="210" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+    <rect width="300" height="34" rx="8" fill="url(#header-track)"/>
+    <rect width="300" height="10" y="24" fill="url(#header-track)"/>
+    <text x="14" y="22" fill="#ffffff" font-size="14" font-weight="700">application_activities</text>
+    <text x="286" y="22" fill="#cffafe" font-size="11" text-anchor="end">Audit History</text>
+    <g transform="translate(14, 52)" font-size="11" fill="#cbd5e1">
+      <text y="0"><tspan fill="#eab308" font-weight="bold">PK </tspan>activity_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="20"><tspan fill="#f43f5e" font-weight="bold">FK </tspan>application_id: <tspan fill="#94a3b8">UUID</tspan></text>
+      <text y="40">activity_type: <tspan fill="#94a3b8">VARCHAR(30)</tspan></text>
+      <text y="60">old_stage: <tspan fill="#94a3b8">VARCHAR(30)</tspan></text>
+      <text y="80">new_stage: <tspan fill="#94a3b8">VARCHAR(30)</tspan></text>
+      <text y="100">notes: <tspan fill="#94a3b8">TEXT</tspan></text>
+      <text y="120">event_timestamp: <tspan fill="#94a3b8">TIMESTAMPTZ</tspan></text>
+    </g>
+  </g>
+
+  <!-- Relationships and Connectors (Smooth lines with markers) -->
+  <g stroke="#64748b" stroke-width="2" fill="none" opacity="0.85">
+    <!-- users -> student_profiles (1:1) -->
+    <path d="M 320 235 L 380 235"/>
+    <!-- student_profiles -> resumes (1:N) -->
+    <path d="M 680 235 L 740 235"/>
+    <!-- student_profiles -> student_skills (1:N) -->
+    <path d="M 430 460 L 430 480 L 180 480 L 180 500"/>
+    <!-- skills -> student_skills (1:N) -->
+    <path d="M 380 595 L 320 595"/>
+    <!-- student_profiles -> projects (1:N) -->
+    <path d="M 400 460 L 400 730 L 180 730 L 180 760"/>
+    <!-- projects -> project_skills (1:N) -->
+    <path d="M 320 825 L 380 825"/>
+    <!-- skills -> project_skills (1:N) -->
+    <path d="M 510 690 L 510 760"/>
+    <!-- companies -> internships (1:N) -->
+    <path d="M 1360 235 L 1420 235"/>
+    <!-- internships -> internship_requirements (1:N) -->
+    <path d="M 1420 320 L 1380 320 L 1380 440"/>
+    <!-- skills -> internship_requirements (1:N) -->
+    <path d="M 660 595 L 1080 500"/>
+    <!-- student_profiles -> evaluations (1:N) -->
+    <path d="M 680 380 L 740 480"/>
+    <!-- internships -> evaluations (1:N) -->
+    <path d="M 1420 350 L 1040 480"/>
+    <!-- evaluations -> requirement_assessments (1:N) -->
+    <path d="M 890 650 L 890 690"/>
+    <!-- evaluations -> skill_gaps (1:N) -->
+    <path d="M 1040 580 L 1120 700"/>
+    <!-- evaluations -> bridge_projects (1:N) -->
+    <path d="M 1040 530 L 1440 680"/>
+    <!-- evaluations -> roadmaps (1:N) -->
+    <path d="M 940 650 L 940 980 L 1120 980"/>
+    <!-- roadmaps -> roadmap_tasks (1:N) -->
+    <path d="M 1400 1035 L 1440 1035"/>
+    <!-- student_profiles -> applications (1:N) -->
+    <path d="M 680 300 L 1040 300 L 1040 120 L 1850 120 L 1850 350"/>
+    <!-- internships -> applications (1:N) -->
+    <path d="M 1720 275 L 1800 400"/>
+    <!-- applications -> application_activities (1:N) -->
+    <path d="M 1950 600 L 1950 680"/>
+  </g>
+</svg>
