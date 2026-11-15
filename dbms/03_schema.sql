@@ -118,3 +118,128 @@ CREATE TABLE internship_requirements (
     requirement_text TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE evaluations (
+    evaluation_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id UUID NOT NULL REFERENCES student_profiles(student_id) ON DELETE CASCADE,
+    internship_id UUID NOT NULL REFERENCES internships(internship_id) ON DELETE CASCADE,
+    compatibility_score NUMERIC(5, 2) NOT NULL CHECK (compatibility_score >= 0.00 AND compatibility_score <= 100.00),
+    coverage_pct NUMERIC(5, 2) NOT NULL CHECK (coverage_pct >= 0.00 AND coverage_pct <= 100.00),
+    scoring_version VARCHAR(30) NOT NULL DEFAULT 'v1.0.0',
+    summary_notes TEXT,
+    evaluated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE requirement_assessments (
+    assessment_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    evaluation_id UUID NOT NULL REFERENCES evaluations(evaluation_id) ON DELETE CASCADE,
+    requirement_id UUID NOT NULL REFERENCES internship_requirements(requirement_id) ON DELETE CASCADE,
+    match_status VARCHAR(30) NOT NULL CHECK (match_status IN ('MATCHED', 'PARTIALLY_MATCHED', 'MISSING', 'NEEDS_VERIFICATION')),
+    match_value NUMERIC(3, 2) NOT NULL CHECK (match_value >= 0.00 AND match_value <= 1.00),
+    confidence_score NUMERIC(4, 2) NOT NULL CHECK (confidence_score >= 0.00 AND confidence_score <= 1.00),
+    evidence_source VARCHAR(30) NOT NULL CHECK (evidence_source IN ('RESUME', 'GITHUB', 'PROJECT', 'PROFILE', 'NONE')),
+    evidence_text TEXT,
+    explanation TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_eval_requirement UNIQUE (evaluation_id, requirement_id)
+);
+
+CREATE TABLE skill_gaps (
+    gap_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    evaluation_id UUID NOT NULL REFERENCES evaluations(evaluation_id) ON DELETE CASCADE,
+    skill_id UUID NOT NULL REFERENCES skills(skill_id) ON DELETE RESTRICT,
+    priority VARCHAR(20) NOT NULL CHECK (priority IN ('CRITICAL', 'IMPORTANT', 'OPTIONAL')),
+    reason TEXT NOT NULL,
+    suggested_action TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_eval_skill_gap UNIQUE (evaluation_id, skill_id)
+);
+
+CREATE TABLE bridge_projects (
+    bridge_project_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    evaluation_id UUID NOT NULL REFERENCES evaluations(evaluation_id) ON DELETE CASCADE,
+    gap_id UUID REFERENCES skill_gaps(gap_id) ON DELETE SET NULL,
+    title VARCHAR(200) NOT NULL,
+    objective TEXT NOT NULL,
+    scope_description TEXT NOT NULL,
+    expected_deliverables TEXT NOT NULL,
+    estimated_effort_hours INT NOT NULL CHECK (estimated_effort_hours > 0),
+    difficulty VARCHAR(20) NOT NULL CHECK (difficulty IN ('EASY', 'MEDIUM', 'HARD')),
+    status VARCHAR(20) NOT NULL DEFAULT 'RECOMMENDED' CHECK (status IN ('RECOMMENDED', 'IN_PROGRESS', 'COMPLETED', 'DISMISSED')),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE roadmaps (
+    roadmap_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    evaluation_id UUID NOT NULL REFERENCES evaluations(evaluation_id) ON DELETE CASCADE,
+    student_id UUID NOT NULL REFERENCES student_profiles(student_id) ON DELETE CASCADE,
+    title VARCHAR(200) NOT NULL,
+    total_days INT NOT NULL DEFAULT 7 CHECK (total_days > 0 AND total_days <= 30),
+    status VARCHAR(20) NOT NULL DEFAULT 'ACTIVE' CHECK (status IN ('ACTIVE', 'COMPLETED', 'ARCHIVED')),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE roadmap_tasks (
+    task_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    roadmap_id UUID NOT NULL REFERENCES roadmaps(roadmap_id) ON DELETE CASCADE,
+    day_number INT NOT NULL CHECK (day_number >= 1 AND day_number <= 30),
+    task_order INT NOT NULL DEFAULT 1 CHECK (task_order >= 1),
+    title VARCHAR(200) NOT NULL,
+    focus_area VARCHAR(200) NOT NULL,
+    expected_outcome TEXT NOT NULL,
+    estimated_minutes INT NOT NULL DEFAULT 60 CHECK (estimated_minutes > 0),
+    is_completed BOOLEAN NOT NULL DEFAULT FALSE,
+    completed_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_roadmap_day_order UNIQUE (roadmap_id, day_number, task_order)
+);
+
+CREATE TABLE applications (
+    application_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id UUID NOT NULL REFERENCES student_profiles(student_id) ON DELETE CASCADE,
+    internship_id UUID NOT NULL REFERENCES internships(internship_id) ON DELETE CASCADE,
+    evaluation_id UUID REFERENCES evaluations(evaluation_id) ON DELETE SET NULL,
+    current_stage VARCHAR(30) NOT NULL DEFAULT 'SAVED' CHECK (current_stage IN ('SAVED', 'RESEARCHING', 'PREPARING', 'READY_TO_APPLY', 'APPLIED', 'ASSESSMENT', 'INTERVIEW', 'OFFER', 'REJECTED', 'WITHDRAWN')),
+    priority VARCHAR(20) NOT NULL DEFAULT 'MEDIUM' CHECK (priority IN ('LOW', 'MEDIUM', 'HIGH')),
+    applied_date DATE,
+    notes TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uq_student_internship_app UNIQUE (student_id, internship_id)
+);
+
+CREATE TABLE application_activities (
+    activity_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    application_id UUID NOT NULL REFERENCES applications(application_id) ON DELETE CASCADE,
+    activity_type VARCHAR(30) NOT NULL CHECK (activity_type IN ('STAGE_CHANGE', 'NOTE_ADDED', 'INTERVIEW_SCHEDULED', 'DEADLINE_ALERT', 'OFFER_RECEIVED')),
+    old_stage VARCHAR(30),
+    new_stage VARCHAR(30),
+    notes TEXT,
+    event_timestamp TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_student_profiles_user ON student_profiles(user_id);
+CREATE INDEX idx_resumes_student_active ON resumes(student_id, is_active);
+CREATE INDEX idx_skills_category ON skills(category);
+CREATE INDEX idx_student_skills_skill ON student_skills(skill_id);
+CREATE INDEX idx_projects_student ON projects(student_id);
+CREATE INDEX idx_project_skills_skill ON project_skills(skill_id);
+CREATE INDEX idx_internships_company ON internships(company_id);
+CREATE INDEX idx_internships_status_deadline ON internships(status, deadline);
+CREATE INDEX idx_internship_reqs_internship ON internship_requirements(internship_id);
+CREATE INDEX idx_internship_reqs_skill ON internship_requirements(skill_id);
+CREATE INDEX idx_evaluations_student_internship ON evaluations(student_id, internship_id);
+CREATE INDEX idx_req_assessments_eval ON requirement_assessments(evaluation_id);
+CREATE INDEX idx_req_assessments_status ON requirement_assessments(match_status);
+CREATE INDEX idx_skill_gaps_eval ON skill_gaps(evaluation_id);
+CREATE INDEX idx_skill_gaps_priority ON skill_gaps(priority);
+CREATE INDEX idx_bridge_projects_eval ON bridge_projects(evaluation_id);
+CREATE INDEX idx_roadmaps_student ON roadmaps(student_id);
+CREATE INDEX idx_roadmaps_eval ON roadmaps(evaluation_id);
+CREATE INDEX idx_roadmap_tasks_roadmap ON roadmap_tasks(roadmap_id, day_number);
+CREATE INDEX idx_applications_student ON applications(student_id);
+CREATE INDEX idx_applications_internship ON applications(internship_id);
+CREATE INDEX idx_applications_stage ON applications(current_stage);
+CREATE INDEX idx_app_activities_app ON application_activities(application_id, event_timestamp DESC);
+
