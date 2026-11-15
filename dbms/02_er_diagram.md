@@ -290,3 +290,25 @@ erDiagram
 | `applications` | 1:N | `application_activities` | One to One-or-Many | `application_activities.application_id` | `CASCADE` |
 
 ---
+
+## 4. Entity Attribute Constraints & Domain Rules
+
+1. **User Authentication (`users`)**:
+   - `email`: Enforces format consistency, guaranteed unique across the platform.
+   - `user_role`: Restricts authorization scope to `STUDENT`, `MENTOR`, or `ADMIN`.
+2. **Student Profile (`student_profiles`)**:
+   - `user_id`: Unique foreign key enforcing strict 1:1 relationship with `users`.
+   - `cgpa`: Constrained between $0.00$ and $10.00$.
+   - `graduation_year`: Constrained between $2000$ and $2100$.
+3. **Requirement Assessment (`requirement_assessments`)**:
+   - `match_status`: Discriminates between `MATCHED`, `PARTIALLY_MATCHED`, `MISSING`, `NEEDS_VERIFICATION`.
+   - `match_value`: Quantified contribution ($1.00$ for matched, $0.50$ for partial, $0.00$ for missing).
+   - Composite uniqueness constraint: `UNIQUE (evaluation_id, requirement_id)` prevents duplicate assessments.
+4. **Roadmap Structure (`roadmap_tasks`)**:
+   - `day_number`: Constrained between $1$ and $30$ (standard default 7-day preparation sprint).
+   - `task_order`: Sequential task index per day.
+   - Composite uniqueness: `UNIQUE (roadmap_id, day_number, task_order)`.
+5. **Application Lifecycle (`applications`)**:
+   - `current_stage`: Strict state machine (`SAVED` → `RESEARCHING` → `PREPARING` → `READY_TO_APPLY` → `APPLIED` → `ASSESSMENT` → `INTERVIEW` → `OFFER` / `REJECTED` / `WITHDRAWN`).
+   - `UNIQUE (student_id, internship_id)`: A student cannot duplicate active tracking entries for the same opportunity.
+
