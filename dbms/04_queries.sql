@@ -310,3 +310,181 @@ LEFT JOIN evaluations e ON sp.student_id = e.student_id
 LEFT JOIN roadmaps r ON sp.student_id = r.student_id
 WHERE sp.student_id = (SELECT student_id FROM student_profiles LIMIT 1)
 GROUP BY sp.student_id, sp.full_name;
+
+-- @R16
+-- R16: READ - Top Matched Opportunities for Student Readiness Ranking
+SELECT 
+    i.internship_id,
+    c.name AS company_name,
+    i.title AS internship_title,
+    i.location,
+    i.stipend_amount,
+    e.compatibility_score,
+    e.coverage_pct,
+    e.evaluated_at
+FROM evaluations e
+JOIN internships i ON e.internship_id = i.internship_id
+JOIN companies c ON i.company_id = c.company_id
+WHERE e.student_id = (SELECT student_id FROM student_profiles LIMIT 1)
+  AND e.compatibility_score >= 60.00
+  AND i.status = 'ACTIVE'
+ORDER BY e.compatibility_score DESC, i.stipend_amount DESC
+LIMIT 10;
+
+-- @R17
+-- R17: READ - High-Demand Market Skills Analysis Across Active Internships
+SELECT 
+    s.skill_id,
+    s.name AS skill_name,
+    s.category,
+    COUNT(ir.requirement_id) AS occurrence_count,
+    ROUND(AVG(ir.weight), 2) AS average_importance_weight,
+    COUNT(ir.requirement_id) FILTER (WHERE ir.requirement_type = 'MANDATORY') AS mandatory_count
+FROM skills s
+JOIN internship_requirements ir ON s.skill_id = ir.skill_id
+JOIN internships i ON ir.internship_id = i.internship_id
+WHERE i.status = 'ACTIVE'
+GROUP BY s.skill_id, s.name, s.category
+ORDER BY occurrence_count DESC, mandatory_count DESC
+LIMIT 15;
+
+-- @R18
+-- R18: READ - Unmet Mandatory Requirements Across Applied Opportunities
+SELECT 
+    sp.full_name AS student_name,
+    c.name AS company_name,
+    i.title AS internship_title,
+    s.name AS missing_mandatory_skill,
+    ir.requirement_text,
+    ra.match_status,
+    ra.explanation
+FROM applications a
+JOIN student_profiles sp ON a.student_id = sp.student_id
+JOIN internships i ON a.internship_id = i.internship_id
+JOIN companies c ON i.company_id = c.company_id
+JOIN evaluations e ON a.evaluation_id = e.evaluation_id
+JOIN requirement_assessments ra ON e.evaluation_id = ra.evaluation_id
+JOIN internship_requirements ir ON ra.requirement_id = ir.requirement_id
+LEFT JOIN skills s ON ir.skill_id = s.skill_id
+WHERE ir.requirement_type = 'MANDATORY'
+  AND ra.match_status IN ('MISSING', 'NEEDS_VERIFICATION')
+ORDER BY i.deadline ASC;
+
+-- @R19
+-- R19: READ - Student Project Skill Coverage vs Global Catalog
+SELECT 
+    s.category,
+    COUNT(DISTINCT s.skill_id) AS total_skills_in_category,
+    COUNT(DISTINCT ss.skill_id) AS student_claimed_skills,
+    COUNT(DISTINCT ps.skill_id) AS student_project_evidenced_skills
+FROM skills s
+LEFT JOIN student_skills ss ON s.skill_id = ss.skill_id 
+    AND ss.student_id = (SELECT student_id FROM student_profiles LIMIT 1)
+LEFT JOIN (
+    SELECT DISTINCT ps_inner.skill_id 
+    FROM project_skills ps_inner
+    JOIN projects p_inner ON ps_inner.project_id = p_inner.project_id
+    WHERE p_inner.student_id = (SELECT student_id FROM student_profiles LIMIT 1)
+) ps ON s.skill_id = ps.skill_id
+GROUP BY s.category
+ORDER BY total_skills_in_category DESC;
+
+-- @R20
+-- R20: READ - Expiring Application Deadlines Within Next 7 Days
+SELECT 
+    sp.student_id,
+    sp.full_name AS student_name,
+    c.name AS company_name,
+    i.title AS internship_title,
+    a.current_stage,
+    i.deadline,
+    (i.deadline - CURRENT_DATE) AS days_remaining
+FROM applications a
+JOIN student_profiles sp ON a.student_id = sp.student_id
+JOIN internships i ON a.internship_id = i.internship_id
+JOIN companies c ON i.company_id = c.company_id
+WHERE a.current_stage IN ('SAVED', 'RESEARCHING', 'PREPARING', 'READY_TO_APPLY')
+  AND i.deadline BETWEEN CURRENT_DATE AND (CURRENT_DATE + INTERVAL '7 days')
+ORDER BY days_remaining ASC;
+
+-- @R21
+-- R21: READ - Company Hiring Aggregates and Average Stipend Offered
+SELECT 
+    c.company_id,
+    c.name AS company_name,
+    c.industry,
+    COUNT(i.internship_id) AS total_openings_posted,
+    ROUND(AVG(i.stipend_amount), 2) AS average_stipend,
+    COUNT(a.application_id) AS total_applications_received,
+    COUNT(a.application_id) FILTER (WHERE a.current_stage = 'OFFER') AS total_offers_extended
+FROM companies c
+JOIN internships i ON c.company_id = i.company_id
+LEFT JOIN applications a ON i.internship_id = a.internship_id
+GROUP BY c.company_id, c.name, c.industry
+ORDER BY total_openings_posted DESC, average_stipend DESC;
+
+-- @R22
+-- R22: READ - Student Preparation Task Velocity and Completion Rates
+SELECT 
+    r.roadmap_id,
+    r.title AS roadmap_title,
+    COUNT(rt.task_id) AS total_tasks,
+    COUNT(rt.task_id) FILTER (WHERE rt.is_completed = TRUE) AS completed_tasks,
+    SUM(rt.estimated_minutes) AS total_prep_minutes_allocated,
+    SUM(rt.estimated_minutes) FILTER (WHERE rt.is_completed = TRUE) AS completed_prep_minutes,
+    ROUND(
+        (SUM(rt.estimated_minutes) FILTER (WHERE rt.is_completed = TRUE)::NUMERIC / 
+         NULLIF(SUM(rt.estimated_minutes), 0)) * 100, 
+        2
+    ) AS time_based_completion_pct
+FROM roadmaps r
+JOIN roadmap_tasks rt ON r.roadmap_id = rt.roadmap_id
+WHERE r.student_id = (SELECT student_id FROM student_profiles LIMIT 1)
+GROUP BY r.roadmap_id, r.title;
+
+-- @R23
+-- R23: READ - Peer Skill Gap Frequency Analysis Across All Evaluations
+SELECT 
+    s.name AS missing_skill_name,
+    s.category,
+    COUNT(sg.gap_id) AS gap_occurrence_frequency,
+    COUNT(sg.gap_id) FILTER (WHERE sg.priority = 'CRITICAL') AS critical_gap_count,
+    COUNT(sg.gap_id) FILTER (WHERE sg.priority = 'IMPORTANT') AS important_gap_count
+FROM skill_gaps sg
+JOIN skills s ON sg.skill_id = s.skill_id
+GROUP BY s.name, s.category
+ORDER BY critical_gap_count DESC, gap_occurrence_frequency DESC
+LIMIT 10;
+
+-- @R24
+-- R24: READ - Multi-Source Verification Audit for High-Confidence Skills
+SELECT 
+    sp.student_id,
+    sp.full_name,
+    s.name AS verified_skill,
+    ss.proficiency,
+    ss.verification_source,
+    ss.years_experience
+FROM student_skills ss
+JOIN student_profiles sp ON ss.student_id = sp.student_id
+JOIN skills s ON ss.skill_id = s.skill_id
+WHERE ss.is_verified = TRUE
+  AND ss.proficiency IN ('ADVANCED', 'EXPERT')
+ORDER BY ss.years_experience DESC;
+
+-- @R25
+-- R25: READ - Historical Evaluation Drift and Score Trajectory
+SELECT 
+    e.evaluation_id,
+    e.evaluated_at,
+    e.scoring_version,
+    e.compatibility_score,
+    e.coverage_pct,
+    LAG(e.compatibility_score) OVER (PARTITION BY e.student_id, e.internship_id ORDER BY e.evaluated_at ASC) AS previous_score,
+    ROUND(
+        e.compatibility_score - LAG(e.compatibility_score) OVER (PARTITION BY e.student_id, e.internship_id ORDER BY e.evaluated_at ASC), 
+        2
+    ) AS score_delta
+FROM evaluations e
+ORDER BY e.evaluated_at ASC
+LIMIT 20;
