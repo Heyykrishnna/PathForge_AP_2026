@@ -1,0 +1,66 @@
+=== W04 run 1 ===
+Update on roadmap_tasks  (cost=5.86..11.70 rows=0 width=0) (actual time=0.400..0.402 rows=0.00 loops=1)
+  Buffers: shared hit=38
+  InitPlan 1
+    ->  Limit  (cost=5.86..5.86 rows=1 width=24) (actual time=0.058..0.059 rows=1.00 loops=1)
+          Buffers: shared hit=7
+          ->  Sort  (cost=5.86..6.06 rows=78 width=24) (actual time=0.058..0.058 rows=1.00 loops=1)
+                Sort Key: roadmap_tasks_1.day_number, roadmap_tasks_1.task_order
+                Sort Method: top-N heapsort  Memory: 25kB
+                Buffers: shared hit=7
+                ->  Seq Scan on roadmap_tasks roadmap_tasks_1  (cost=0.00..5.47 rows=78 width=24) (actual time=0.005..0.031 rows=78.00 loops=1)
+                      Filter: (NOT is_completed)
+                      Rows Removed by Filter: 69
+                      Buffers: shared hit=4
+  ->  Seq Scan on roadmap_tasks  (cost=0.00..5.84 rows=1 width=15) (actual time=0.078..0.088 rows=1.00 loops=1)
+        Filter: (task_id = (InitPlan 1).col1)
+        Rows Removed by Filter: 146
+        Buffers: shared hit=11
+Planning:
+  Buffers: shared hit=128
+Planning Time: 0.725 ms
+Execution Time: 0.546 ms
+=== W04 run 2 ===
+Update on roadmap_tasks  (cost=5.86..11.70 rows=0 width=0) (actual time=0.241..0.242 rows=0.00 loops=1)
+  Buffers: shared hit=38
+  InitPlan 1
+    ->  Limit  (cost=5.86..5.86 rows=1 width=24) (actual time=0.045..0.045 rows=1.00 loops=1)
+          Buffers: shared hit=7
+          ->  Sort  (cost=5.86..6.06 rows=78 width=24) (actual time=0.044..0.044 rows=1.00 loops=1)
+                Sort Key: roadmap_tasks_1.day_number, roadmap_tasks_1.task_order
+                Sort Method: top-N heapsort  Memory: 25kB
+                Buffers: shared hit=7
+                ->  Seq Scan on roadmap_tasks roadmap_tasks_1  (cost=0.00..5.47 rows=78 width=24) (actual time=0.003..0.026 rows=78.00 loops=1)
+                      Filter: (NOT is_completed)
+                      Rows Removed by Filter: 69
+                      Buffers: shared hit=4
+  ->  Seq Scan on roadmap_tasks  (cost=0.00..5.84 rows=1 width=15) (actual time=0.061..0.067 rows=1.00 loops=1)
+        Filter: (task_id = (InitPlan 1).col1)
+        Rows Removed by Filter: 146
+        Buffers: shared hit=11
+Planning:
+  Buffers: shared hit=128
+Planning Time: 0.689 ms
+Execution Time: 0.342 ms
+=== W04 run 3 ===
+Update on roadmap_tasks  (cost=5.86..11.70 rows=0 width=0) (actual time=0.344..0.345 rows=0.00 loops=1)
+  Buffers: shared hit=38
+  InitPlan 1
+    ->  Limit  (cost=5.86..5.86 rows=1 width=24) (actual time=0.067..0.067 rows=1.00 loops=1)
+          Buffers: shared hit=7
+          ->  Sort  (cost=5.86..6.06 rows=78 width=24) (actual time=0.066..0.066 rows=1.00 loops=1)
+                Sort Key: roadmap_tasks_1.day_number, roadmap_tasks_1.task_order
+                Sort Method: top-N heapsort  Memory: 25kB
+                Buffers: shared hit=7
+                ->  Seq Scan on roadmap_tasks roadmap_tasks_1  (cost=0.00..5.47 rows=78 width=24) (actual time=0.006..0.037 rows=78.00 loops=1)
+                      Filter: (NOT is_completed)
+                      Rows Removed by Filter: 69
+                      Buffers: shared hit=4
+  ->  Seq Scan on roadmap_tasks  (cost=0.00..5.84 rows=1 width=15) (actual time=0.091..0.098 rows=1.00 loops=1)
+        Filter: (task_id = (InitPlan 1).col1)
+        Rows Removed by Filter: 146
+        Buffers: shared hit=11
+Planning:
+  Buffers: shared hit=128
+Planning Time: 0.816 ms
+Execution Time: 0.493 ms

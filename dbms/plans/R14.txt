@@ -1,0 +1,84 @@
+=== R14 run 1 ===
+Sort  (cost=8.88..8.88 rows=2 width=87) (actual time=0.084..0.085 rows=1.00 loops=1)
+  Sort Key: aa.event_timestamp DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=9
+  InitPlan 1
+    ->  Limit  (cost=3.02..3.02 rows=1 width=24) (actual time=0.029..0.029 rows=1.00 loops=1)
+          Buffers: shared hit=2
+          ->  Sort  (cost=3.02..3.19 rows=68 width=24) (actual time=0.028..0.028 rows=1.00 loops=1)
+                Sort Key: applications.updated_at DESC
+                Sort Method: top-N heapsort  Memory: 25kB
+                Buffers: shared hit=2
+                ->  Seq Scan on applications  (cost=0.00..2.68 rows=68 width=24) (actual time=0.005..0.014 rows=68.00 loops=1)
+                      Buffers: shared hit=2
+  ->  Nested Loop  (cost=0.00..5.84 rows=2 width=87) (actual time=0.051..0.069 rows=1.00 loops=1)
+        Buffers: shared hit=6
+        ->  Seq Scan on applications a  (cost=0.00..2.85 rows=1 width=16) (actual time=0.041..0.053 rows=1.00 loops=1)
+              Filter: (application_id = (InitPlan 1).col1)
+              Rows Removed by Filter: 67
+              Buffers: shared hit=4
+        ->  Seq Scan on application_activities aa  (cost=0.00..2.98 rows=2 width=103) (actual time=0.009..0.015 rows=1.00 loops=1)
+              Filter: (application_id = (InitPlan 1).col1)
+              Rows Removed by Filter: 77
+              Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=220
+Planning Time: 0.936 ms
+Execution Time: 0.135 ms
+=== R14 run 2 ===
+Sort  (cost=8.88..8.88 rows=2 width=87) (actual time=0.076..0.077 rows=1.00 loops=1)
+  Sort Key: aa.event_timestamp DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=9
+  InitPlan 1
+    ->  Limit  (cost=3.02..3.02 rows=1 width=24) (actual time=0.033..0.033 rows=1.00 loops=1)
+          Buffers: shared hit=2
+          ->  Sort  (cost=3.02..3.19 rows=68 width=24) (actual time=0.032..0.032 rows=1.00 loops=1)
+                Sort Key: applications.updated_at DESC
+                Sort Method: top-N heapsort  Memory: 25kB
+                Buffers: shared hit=2
+                ->  Seq Scan on applications  (cost=0.00..2.68 rows=68 width=24) (actual time=0.004..0.017 rows=68.00 loops=1)
+                      Buffers: shared hit=2
+  ->  Nested Loop  (cost=0.00..5.84 rows=2 width=87) (actual time=0.051..0.061 rows=1.00 loops=1)
+        Buffers: shared hit=6
+        ->  Seq Scan on applications a  (cost=0.00..2.85 rows=1 width=16) (actual time=0.044..0.047 rows=1.00 loops=1)
+              Filter: (application_id = (InitPlan 1).col1)
+              Rows Removed by Filter: 67
+              Buffers: shared hit=4
+        ->  Seq Scan on application_activities aa  (cost=0.00..2.98 rows=2 width=103) (actual time=0.006..0.012 rows=1.00 loops=1)
+              Filter: (application_id = (InitPlan 1).col1)
+              Rows Removed by Filter: 77
+              Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=220
+Planning Time: 0.992 ms
+Execution Time: 0.122 ms
+=== R14 run 3 ===
+Sort  (cost=8.88..8.88 rows=2 width=87) (actual time=0.061..0.062 rows=1.00 loops=1)
+  Sort Key: aa.event_timestamp DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=9
+  InitPlan 1
+    ->  Limit  (cost=3.02..3.02 rows=1 width=24) (actual time=0.025..0.025 rows=1.00 loops=1)
+          Buffers: shared hit=2
+          ->  Sort  (cost=3.02..3.19 rows=68 width=24) (actual time=0.024..0.025 rows=1.00 loops=1)
+                Sort Key: applications.updated_at DESC
+                Sort Method: top-N heapsort  Memory: 25kB
+                Buffers: shared hit=2
+                ->  Seq Scan on applications  (cost=0.00..2.68 rows=68 width=24) (actual time=0.004..0.013 rows=68.00 loops=1)
+                      Buffers: shared hit=2
+  ->  Nested Loop  (cost=0.00..5.84 rows=2 width=87) (actual time=0.039..0.049 rows=1.00 loops=1)
+        Buffers: shared hit=6
+        ->  Seq Scan on applications a  (cost=0.00..2.85 rows=1 width=16) (actual time=0.034..0.037 rows=1.00 loops=1)
+              Filter: (application_id = (InitPlan 1).col1)
+              Rows Removed by Filter: 67
+              Buffers: shared hit=4
+        ->  Seq Scan on application_activities aa  (cost=0.00..2.98 rows=2 width=103) (actual time=0.005..0.010 rows=1.00 loops=1)
+              Filter: (application_id = (InitPlan 1).col1)
+              Rows Removed by Filter: 77
+              Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=220
+Planning Time: 0.760 ms
+Execution Time: 0.098 ms

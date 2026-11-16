@@ -1,0 +1,99 @@
+=== R02 run 1 ===
+Sort  (cost=10.72..10.73 rows=6 width=43) (actual time=0.192..0.195 rows=12.00 loops=1)
+  Sort Key: s.category, ss.years_experience DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=39
+  ->  Nested Loop  (cost=3.68..10.64 rows=6 width=43) (actual time=0.073..0.124 rows=12.00 loops=1)
+        Buffers: shared hit=33
+        ->  Nested Loop  (cost=3.54..9.58 rows=6 width=42) (actual time=0.065..0.100 rows=12.00 loops=1)
+              Buffers: shared hit=9
+              ->  Hash Join  (cost=3.26..8.54 rows=1 width=16) (actual time=0.047..0.078 rows=1.00 loops=1)
+                    Hash Cond: (sp.user_id = u.user_id)
+                    Buffers: shared hit=6
+                    ->  Seq Scan on student_profiles sp  (cost=0.00..5.00 rows=100 width=32) (actual time=0.011..0.023 rows=100.00 loops=1)
+                          Buffers: shared hit=4
+                    ->  Hash  (cost=3.25..3.25 rows=1 width=16) (actual time=0.026..0.026 rows=1.00 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                          Buffers: shared hit=2
+                          ->  Seq Scan on users u  (cost=0.00..3.25 rows=1 width=16) (actual time=0.007..0.019 rows=1.00 loops=1)
+                                Filter: ((email)::text = 'aravind.sharma@example.edu'::text)
+                                Rows Removed by Filter: 99
+                                Buffers: shared hit=2
+              ->  Index Scan using student_skills_pkey on student_skills ss  (cost=0.28..0.98 rows=6 width=58) (actual time=0.015..0.017 rows=12.00 loops=1)
+                    Index Cond: (student_id = sp.student_id)
+                    Index Searches: 1
+                    Buffers: shared hit=3
+        ->  Index Scan using skills_pkey on skills s  (cost=0.14..0.18 rows=1 width=33) (actual time=0.002..0.002 rows=1.00 loops=12)
+              Index Cond: (skill_id = ss.skill_id)
+              Index Searches: 12
+              Buffers: shared hit=24
+Planning:
+  Buffers: shared hit=404
+Planning Time: 2.512 ms
+Execution Time: 0.411 ms
+=== R02 run 2 ===
+Sort  (cost=10.72..10.73 rows=6 width=43) (actual time=0.170..0.172 rows=12.00 loops=1)
+  Sort Key: s.category, ss.years_experience DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=39
+  ->  Nested Loop  (cost=3.68..10.64 rows=6 width=43) (actual time=0.063..0.108 rows=12.00 loops=1)
+        Buffers: shared hit=33
+        ->  Nested Loop  (cost=3.54..9.58 rows=6 width=42) (actual time=0.056..0.088 rows=12.00 loops=1)
+              Buffers: shared hit=9
+              ->  Hash Join  (cost=3.26..8.54 rows=1 width=16) (actual time=0.042..0.070 rows=1.00 loops=1)
+                    Hash Cond: (sp.user_id = u.user_id)
+                    Buffers: shared hit=6
+                    ->  Seq Scan on student_profiles sp  (cost=0.00..5.00 rows=100 width=32) (actual time=0.010..0.022 rows=100.00 loops=1)
+                          Buffers: shared hit=4
+                    ->  Hash  (cost=3.25..3.25 rows=1 width=16) (actual time=0.022..0.023 rows=1.00 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                          Buffers: shared hit=2
+                          ->  Seq Scan on users u  (cost=0.00..3.25 rows=1 width=16) (actual time=0.006..0.017 rows=1.00 loops=1)
+                                Filter: ((email)::text = 'aravind.sharma@example.edu'::text)
+                                Rows Removed by Filter: 99
+                                Buffers: shared hit=2
+              ->  Index Scan using student_skills_pkey on student_skills ss  (cost=0.28..0.98 rows=6 width=58) (actual time=0.012..0.014 rows=12.00 loops=1)
+                    Index Cond: (student_id = sp.student_id)
+                    Index Searches: 1
+                    Buffers: shared hit=3
+        ->  Index Scan using skills_pkey on skills s  (cost=0.14..0.18 rows=1 width=33) (actual time=0.001..0.001 rows=1.00 loops=12)
+              Index Cond: (skill_id = ss.skill_id)
+              Index Searches: 12
+              Buffers: shared hit=24
+Planning:
+  Buffers: shared hit=404
+Planning Time: 2.673 ms
+Execution Time: 0.251 ms
+=== R02 run 3 ===
+Sort  (cost=10.72..10.73 rows=6 width=43) (actual time=0.116..0.118 rows=12.00 loops=1)
+  Sort Key: s.category, ss.years_experience DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=39
+  ->  Nested Loop  (cost=3.68..10.64 rows=6 width=43) (actual time=0.044..0.078 rows=12.00 loops=1)
+        Buffers: shared hit=33
+        ->  Nested Loop  (cost=3.54..9.58 rows=6 width=42) (actual time=0.038..0.063 rows=12.00 loops=1)
+              Buffers: shared hit=9
+              ->  Hash Join  (cost=3.26..8.54 rows=1 width=16) (actual time=0.028..0.050 rows=1.00 loops=1)
+                    Hash Cond: (sp.user_id = u.user_id)
+                    Buffers: shared hit=6
+                    ->  Seq Scan on student_profiles sp  (cost=0.00..5.00 rows=100 width=32) (actual time=0.005..0.014 rows=100.00 loops=1)
+                          Buffers: shared hit=4
+                    ->  Hash  (cost=3.25..3.25 rows=1 width=16) (actual time=0.016..0.016 rows=1.00 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                          Buffers: shared hit=2
+                          ->  Seq Scan on users u  (cost=0.00..3.25 rows=1 width=16) (actual time=0.004..0.012 rows=1.00 loops=1)
+                                Filter: ((email)::text = 'aravind.sharma@example.edu'::text)
+                                Rows Removed by Filter: 99
+                                Buffers: shared hit=2
+              ->  Index Scan using student_skills_pkey on student_skills ss  (cost=0.28..0.98 rows=6 width=58) (actual time=0.008..0.010 rows=12.00 loops=1)
+                    Index Cond: (student_id = sp.student_id)
+                    Index Searches: 1
+                    Buffers: shared hit=3
+        ->  Index Scan using skills_pkey on skills s  (cost=0.14..0.18 rows=1 width=33) (actual time=0.001..0.001 rows=1.00 loops=12)
+              Index Cond: (skill_id = ss.skill_id)
+              Index Searches: 12
+              Buffers: shared hit=24
+Planning:
+  Buffers: shared hit=404
+Planning Time: 1.467 ms
+Execution Time: 0.173 ms

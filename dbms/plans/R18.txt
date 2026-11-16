@@ -1,0 +1,213 @@
+=== R18 run 1 ===
+Sort  (cost=44.62..44.67 rows=19 width=192) (actual time=0.238..0.239 rows=17.00 loops=1)
+  Sort Key: i.deadline
+  Sort Method: quicksort  Memory: 28kB
+  Buffers: shared hit=46
+  ->  Hash Left Join  (cost=34.27..44.22 rows=19 width=192) (actual time=0.190..0.214 rows=17.00 loops=1)
+        Hash Cond: (ir.skill_id = s.skill_id)
+        Buffers: shared hit=43
+        ->  Nested Loop  (cost=32.49..42.37 rows=19 width=199) (actual time=0.178..0.200 rows=17.00 loops=1)
+              Join Filter: (e.evaluation_id = a.evaluation_id)
+              Buffers: shared hit=42
+              ->  Hash Join  (cost=32.34..37.97 rows=19 width=231) (actual time=0.174..0.190 rows=17.00 loops=1)
+                    Hash Cond: (i.company_id = c.company_id)
+                    Buffers: shared hit=24
+                    ->  Hash Join  (cost=31.01..36.57 rows=19 width=239) (actual time=0.151..0.166 rows=17.00 loops=1)
+                          Hash Cond: (sp.student_id = a.student_id)
+                          Buffers: shared hit=23
+                          ->  Seq Scan on student_profiles sp  (cost=0.00..5.00 rows=100 width=28) (actual time=0.021..0.026 rows=100.00 loops=1)
+                                Buffers: shared hit=4
+                          ->  Hash  (cost=30.77..30.77 rows=19 width=243) (actual time=0.123..0.124 rows=17.00 loops=1)
+                                Buckets: 1024  Batches: 1  Memory Usage: 13kB
+                                Buffers: shared hit=19
+                                ->  Hash Join  (cost=27.89..30.77 rows=19 width=243) (actual time=0.116..0.121 rows=17.00 loops=1)
+                                      Hash Cond: (i.internship_id = a.internship_id)
+                                      Buffers: shared hit=19
+                                      ->  Seq Scan on internships i  (cost=0.00..2.50 rows=50 width=79) (actual time=0.002..0.004 rows=50.00 loops=1)
+                                            Buffers: shared hit=2
+                                      ->  Hash  (cost=27.65..27.65 rows=19 width=196) (actual time=0.110..0.110 rows=17.00 loops=1)
+                                            Buckets: 1024  Batches: 1  Memory Usage: 12kB
+                                            Buffers: shared hit=17
+                                            ->  Hash Join  (cost=24.53..27.65 rows=19 width=196) (actual time=0.102..0.108 rows=17.00 loops=1)
+                                                  Hash Cond: (a.evaluation_id = ra.evaluation_id)
+                                                  Buffers: shared hit=17
+                                                  ->  Seq Scan on applications a  (cost=0.00..2.68 rows=68 width=48) (actual time=0.003..0.005 rows=68.00 loops=1)
+                                                        Buffers: shared hit=2
+                                                  ->  Hash  (cost=24.18..24.18 rows=28 width=148) (actual time=0.095..0.096 rows=28.00 loops=1)
+                                                        Buckets: 1024  Batches: 1  Memory Usage: 13kB
+                                                        Buffers: shared hit=15
+                                                        ->  Hash Join  (cost=9.79..24.18 rows=28 width=148) (actual time=0.047..0.091 rows=28.00 loops=1)
+                                                              Hash Cond: (ra.requirement_id = ir.requirement_id)
+                                                              Buffers: shared hit=15
+                                                              ->  Seq Scan on requirement_assessments ra  (cost=0.00..14.03 rows=135 width=86) (actual time=0.015..0.053 rows=135.00 loops=1)
+                                                                    Filter: ((match_status)::text = ANY ('{MISSING,NEEDS_VERIFICATION}'::text[]))
+                                                                    Rows Removed by Filter: 267
+                                                                    Buffers: shared hit=9
+                                                              ->  Hash  (cost=9.14..9.14 rows=52 width=94) (actual time=0.027..0.027 rows=52.00 loops=1)
+                                                                    Buckets: 1024  Batches: 1  Memory Usage: 15kB
+                                                                    Buffers: shared hit=6
+                                                                    ->  Seq Scan on internship_requirements ir  (cost=0.00..9.14 rows=52 width=94) (actual time=0.004..0.021 rows=52.00 loops=1)
+                                                                          Filter: ((requirement_type)::text = 'MANDATORY'::text)
+                                                                          Rows Removed by Filter: 199
+                                                                          Buffers: shared hit=6
+                    ->  Hash  (cost=1.15..1.15 rows=15 width=24) (actual time=0.017..0.017 rows=15.00 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                          Buffers: shared hit=1
+                          ->  Seq Scan on companies c  (cost=0.00..1.15 rows=15 width=24) (actual time=0.010..0.011 rows=15.00 loops=1)
+                                Buffers: shared hit=1
+              ->  Index Only Scan using evaluations_pkey on evaluations e  (cost=0.14..0.22 rows=1 width=16) (actual time=0.000..0.000 rows=1.00 loops=17)
+                    Index Cond: (evaluation_id = ra.evaluation_id)
+                    Heap Fetches: 0
+                    Index Searches: 17
+                    Buffers: shared hit=18
+        ->  Hash  (cost=1.35..1.35 rows=35 width=25) (actual time=0.007..0.007 rows=35.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 10kB
+              Buffers: shared hit=1
+              ->  Seq Scan on skills s  (cost=0.00..1.35 rows=35 width=25) (actual time=0.002..0.003 rows=35.00 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=773
+Planning Time: 3.867 ms
+Execution Time: 0.315 ms
+=== R18 run 2 ===
+Sort  (cost=44.62..44.67 rows=19 width=192) (actual time=0.169..0.170 rows=17.00 loops=1)
+  Sort Key: i.deadline
+  Sort Method: quicksort  Memory: 28kB
+  Buffers: shared hit=46
+  ->  Hash Left Join  (cost=34.27..44.22 rows=19 width=192) (actual time=0.130..0.155 rows=17.00 loops=1)
+        Hash Cond: (ir.skill_id = s.skill_id)
+        Buffers: shared hit=43
+        ->  Nested Loop  (cost=32.49..42.37 rows=19 width=199) (actual time=0.120..0.143 rows=17.00 loops=1)
+              Join Filter: (e.evaluation_id = a.evaluation_id)
+              Buffers: shared hit=42
+              ->  Hash Join  (cost=32.34..37.97 rows=19 width=231) (actual time=0.118..0.135 rows=17.00 loops=1)
+                    Hash Cond: (i.company_id = c.company_id)
+                    Buffers: shared hit=24
+                    ->  Hash Join  (cost=31.01..36.57 rows=19 width=239) (actual time=0.107..0.123 rows=17.00 loops=1)
+                          Hash Cond: (sp.student_id = a.student_id)
+                          Buffers: shared hit=23
+                          ->  Seq Scan on student_profiles sp  (cost=0.00..5.00 rows=100 width=28) (actual time=0.004..0.009 rows=100.00 loops=1)
+                                Buffers: shared hit=4
+                          ->  Hash  (cost=30.77..30.77 rows=19 width=243) (actual time=0.097..0.098 rows=17.00 loops=1)
+                                Buckets: 1024  Batches: 1  Memory Usage: 13kB
+                                Buffers: shared hit=19
+                                ->  Hash Join  (cost=27.89..30.77 rows=19 width=243) (actual time=0.089..0.094 rows=17.00 loops=1)
+                                      Hash Cond: (i.internship_id = a.internship_id)
+                                      Buffers: shared hit=19
+                                      ->  Seq Scan on internships i  (cost=0.00..2.50 rows=50 width=79) (actual time=0.002..0.003 rows=50.00 loops=1)
+                                            Buffers: shared hit=2
+                                      ->  Hash  (cost=27.65..27.65 rows=19 width=196) (actual time=0.084..0.084 rows=17.00 loops=1)
+                                            Buckets: 1024  Batches: 1  Memory Usage: 12kB
+                                            Buffers: shared hit=17
+                                            ->  Hash Join  (cost=24.53..27.65 rows=19 width=196) (actual time=0.076..0.082 rows=17.00 loops=1)
+                                                  Hash Cond: (a.evaluation_id = ra.evaluation_id)
+                                                  Buffers: shared hit=17
+                                                  ->  Seq Scan on applications a  (cost=0.00..2.68 rows=68 width=48) (actual time=0.003..0.005 rows=68.00 loops=1)
+                                                        Buffers: shared hit=2
+                                                  ->  Hash  (cost=24.18..24.18 rows=28 width=148) (actual time=0.068..0.068 rows=28.00 loops=1)
+                                                        Buckets: 1024  Batches: 1  Memory Usage: 13kB
+                                                        Buffers: shared hit=15
+                                                        ->  Hash Join  (cost=9.79..24.18 rows=28 width=148) (actual time=0.031..0.065 rows=28.00 loops=1)
+                                                              Hash Cond: (ra.requirement_id = ir.requirement_id)
+                                                              Buffers: shared hit=15
+                                                              ->  Seq Scan on requirement_assessments ra  (cost=0.00..14.03 rows=135 width=86) (actual time=0.005..0.033 rows=135.00 loops=1)
+                                                                    Filter: ((match_status)::text = ANY ('{MISSING,NEEDS_VERIFICATION}'::text[]))
+                                                                    Rows Removed by Filter: 267
+                                                                    Buffers: shared hit=9
+                                                              ->  Hash  (cost=9.14..9.14 rows=52 width=94) (actual time=0.021..0.021 rows=52.00 loops=1)
+                                                                    Buckets: 1024  Batches: 1  Memory Usage: 15kB
+                                                                    Buffers: shared hit=6
+                                                                    ->  Seq Scan on internship_requirements ir  (cost=0.00..9.14 rows=52 width=94) (actual time=0.003..0.017 rows=52.00 loops=1)
+                                                                          Filter: ((requirement_type)::text = 'MANDATORY'::text)
+                                                                          Rows Removed by Filter: 199
+                                                                          Buffers: shared hit=6
+                    ->  Hash  (cost=1.15..1.15 rows=15 width=24) (actual time=0.008..0.008 rows=15.00 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                          Buffers: shared hit=1
+                          ->  Seq Scan on companies c  (cost=0.00..1.15 rows=15 width=24) (actual time=0.005..0.006 rows=15.00 loops=1)
+                                Buffers: shared hit=1
+              ->  Index Only Scan using evaluations_pkey on evaluations e  (cost=0.14..0.22 rows=1 width=16) (actual time=0.000..0.000 rows=1.00 loops=17)
+                    Index Cond: (evaluation_id = ra.evaluation_id)
+                    Heap Fetches: 0
+                    Index Searches: 17
+                    Buffers: shared hit=18
+        ->  Hash  (cost=1.35..1.35 rows=35 width=25) (actual time=0.006..0.006 rows=35.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 10kB
+              Buffers: shared hit=1
+              ->  Seq Scan on skills s  (cost=0.00..1.35 rows=35 width=25) (actual time=0.002..0.003 rows=35.00 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=773
+Planning Time: 4.325 ms
+Execution Time: 0.220 ms
+=== R18 run 3 ===
+Sort  (cost=44.62..44.67 rows=19 width=192) (actual time=0.163..0.165 rows=17.00 loops=1)
+  Sort Key: i.deadline
+  Sort Method: quicksort  Memory: 28kB
+  Buffers: shared hit=46
+  ->  Hash Left Join  (cost=34.27..44.22 rows=19 width=192) (actual time=0.127..0.150 rows=17.00 loops=1)
+        Hash Cond: (ir.skill_id = s.skill_id)
+        Buffers: shared hit=43
+        ->  Nested Loop  (cost=32.49..42.37 rows=19 width=199) (actual time=0.116..0.136 rows=17.00 loops=1)
+              Join Filter: (e.evaluation_id = a.evaluation_id)
+              Buffers: shared hit=42
+              ->  Hash Join  (cost=32.34..37.97 rows=19 width=231) (actual time=0.113..0.129 rows=17.00 loops=1)
+                    Hash Cond: (i.company_id = c.company_id)
+                    Buffers: shared hit=24
+                    ->  Hash Join  (cost=31.01..36.57 rows=19 width=239) (actual time=0.101..0.115 rows=17.00 loops=1)
+                          Hash Cond: (sp.student_id = a.student_id)
+                          Buffers: shared hit=23
+                          ->  Seq Scan on student_profiles sp  (cost=0.00..5.00 rows=100 width=28) (actual time=0.004..0.008 rows=100.00 loops=1)
+                                Buffers: shared hit=4
+                          ->  Hash  (cost=30.77..30.77 rows=19 width=243) (actual time=0.092..0.092 rows=17.00 loops=1)
+                                Buckets: 1024  Batches: 1  Memory Usage: 13kB
+                                Buffers: shared hit=19
+                                ->  Hash Join  (cost=27.89..30.77 rows=19 width=243) (actual time=0.085..0.089 rows=17.00 loops=1)
+                                      Hash Cond: (i.internship_id = a.internship_id)
+                                      Buffers: shared hit=19
+                                      ->  Seq Scan on internships i  (cost=0.00..2.50 rows=50 width=79) (actual time=0.002..0.003 rows=50.00 loops=1)
+                                            Buffers: shared hit=2
+                                      ->  Hash  (cost=27.65..27.65 rows=19 width=196) (actual time=0.080..0.080 rows=17.00 loops=1)
+                                            Buckets: 1024  Batches: 1  Memory Usage: 12kB
+                                            Buffers: shared hit=17
+                                            ->  Hash Join  (cost=24.53..27.65 rows=19 width=196) (actual time=0.072..0.077 rows=17.00 loops=1)
+                                                  Hash Cond: (a.evaluation_id = ra.evaluation_id)
+                                                  Buffers: shared hit=17
+                                                  ->  Seq Scan on applications a  (cost=0.00..2.68 rows=68 width=48) (actual time=0.002..0.005 rows=68.00 loops=1)
+                                                        Buffers: shared hit=2
+                                                  ->  Hash  (cost=24.18..24.18 rows=28 width=148) (actual time=0.066..0.066 rows=28.00 loops=1)
+                                                        Buckets: 1024  Batches: 1  Memory Usage: 13kB
+                                                        Buffers: shared hit=15
+                                                        ->  Hash Join  (cost=9.79..24.18 rows=28 width=148) (actual time=0.031..0.063 rows=28.00 loops=1)
+                                                              Hash Cond: (ra.requirement_id = ir.requirement_id)
+                                                              Buffers: shared hit=15
+                                                              ->  Seq Scan on requirement_assessments ra  (cost=0.00..14.03 rows=135 width=86) (actual time=0.005..0.032 rows=135.00 loops=1)
+                                                                    Filter: ((match_status)::text = ANY ('{MISSING,NEEDS_VERIFICATION}'::text[]))
+                                                                    Rows Removed by Filter: 267
+                                                                    Buffers: shared hit=9
+                                                              ->  Hash  (cost=9.14..9.14 rows=52 width=94) (actual time=0.021..0.021 rows=52.00 loops=1)
+                                                                    Buckets: 1024  Batches: 1  Memory Usage: 15kB
+                                                                    Buffers: shared hit=6
+                                                                    ->  Seq Scan on internship_requirements ir  (cost=0.00..9.14 rows=52 width=94) (actual time=0.003..0.017 rows=52.00 loops=1)
+                                                                          Filter: ((requirement_type)::text = 'MANDATORY'::text)
+                                                                          Rows Removed by Filter: 199
+                                                                          Buffers: shared hit=6
+                    ->  Hash  (cost=1.15..1.15 rows=15 width=24) (actual time=0.009..0.009 rows=15.00 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                          Buffers: shared hit=1
+                          ->  Seq Scan on companies c  (cost=0.00..1.15 rows=15 width=24) (actual time=0.005..0.006 rows=15.00 loops=1)
+                                Buffers: shared hit=1
+              ->  Index Only Scan using evaluations_pkey on evaluations e  (cost=0.14..0.22 rows=1 width=16) (actual time=0.000..0.000 rows=1.00 loops=17)
+                    Index Cond: (evaluation_id = ra.evaluation_id)
+                    Heap Fetches: 0
+                    Index Searches: 17
+                    Buffers: shared hit=18
+        ->  Hash  (cost=1.35..1.35 rows=35 width=25) (actual time=0.008..0.008 rows=35.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 10kB
+              Buffers: shared hit=1
+              ->  Seq Scan on skills s  (cost=0.00..1.35 rows=35 width=25) (actual time=0.001..0.003 rows=35.00 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=773
+Planning Time: 3.071 ms
+Execution Time: 0.236 ms

@@ -1,0 +1,69 @@
+=== R04 run 1 ===
+Limit  (cost=5.15..5.20 rows=22 width=111) (actual time=0.101..0.105 rows=23.00 loops=1)
+  Buffers: shared hit=9
+  ->  Sort  (cost=5.15..5.20 rows=22 width=111) (actual time=0.100..0.102 rows=23.00 loops=1)
+        Sort Key: i.deadline, i.stipend_amount DESC
+        Sort Method: quicksort  Memory: 29kB
+        Buffers: shared hit=9
+        ->  Hash Join  (cost=1.34..4.66 rows=22 width=111) (actual time=0.038..0.070 rows=23.00 loops=1)
+              Hash Cond: (i.company_id = c.company_id)
+              Buffers: shared hit=3
+              ->  Seq Scan on internships i  (cost=0.00..3.25 rows=22 width=99) (actual time=0.010..0.036 rows=23.00 loops=1)
+                    Filter: ((stipend_amount >= 25000.00) AND ((status)::text = 'ACTIVE'::text) AND (((internship_type)::text = 'REMOTE'::text) OR ((location)::text ~~* '%Bengaluru%'::text)) AND (deadline >= CURRENT_DATE))
+                    Rows Removed by Filter: 27
+                    Buffers: shared hit=2
+              ->  Hash  (cost=1.15..1.15 rows=15 width=44) (actual time=0.017..0.018 rows=15.00 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 10kB
+                    Buffers: shared hit=1
+                    ->  Seq Scan on companies c  (cost=0.00..1.15 rows=15 width=44) (actual time=0.008..0.010 rows=15.00 loops=1)
+                          Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=324
+Planning Time: 1.766 ms
+Execution Time: 0.146 ms
+=== R04 run 2 ===
+Limit  (cost=5.15..5.20 rows=22 width=111) (actual time=0.097..0.100 rows=23.00 loops=1)
+  Buffers: shared hit=9
+  ->  Sort  (cost=5.15..5.20 rows=22 width=111) (actual time=0.097..0.098 rows=23.00 loops=1)
+        Sort Key: i.deadline, i.stipend_amount DESC
+        Sort Method: quicksort  Memory: 29kB
+        Buffers: shared hit=9
+        ->  Hash Join  (cost=1.34..4.66 rows=22 width=111) (actual time=0.038..0.064 rows=23.00 loops=1)
+              Hash Cond: (i.company_id = c.company_id)
+              Buffers: shared hit=3
+              ->  Seq Scan on internships i  (cost=0.00..3.25 rows=22 width=99) (actual time=0.012..0.033 rows=23.00 loops=1)
+                    Filter: ((stipend_amount >= 25000.00) AND ((status)::text = 'ACTIVE'::text) AND (((internship_type)::text = 'REMOTE'::text) OR ((location)::text ~~* '%Bengaluru%'::text)) AND (deadline >= CURRENT_DATE))
+                    Rows Removed by Filter: 27
+                    Buffers: shared hit=2
+              ->  Hash  (cost=1.15..1.15 rows=15 width=44) (actual time=0.017..0.017 rows=15.00 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 10kB
+                    Buffers: shared hit=1
+                    ->  Seq Scan on companies c  (cost=0.00..1.15 rows=15 width=44) (actual time=0.007..0.008 rows=15.00 loops=1)
+                          Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=324
+Planning Time: 0.893 ms
+Execution Time: 0.140 ms
+=== R04 run 3 ===
+Limit  (cost=5.15..5.20 rows=22 width=111) (actual time=0.103..0.107 rows=23.00 loops=1)
+  Buffers: shared hit=9
+  ->  Sort  (cost=5.15..5.20 rows=22 width=111) (actual time=0.102..0.104 rows=23.00 loops=1)
+        Sort Key: i.deadline, i.stipend_amount DESC
+        Sort Method: quicksort  Memory: 29kB
+        Buffers: shared hit=9
+        ->  Hash Join  (cost=1.34..4.66 rows=22 width=111) (actual time=0.042..0.072 rows=23.00 loops=1)
+              Hash Cond: (i.company_id = c.company_id)
+              Buffers: shared hit=3
+              ->  Seq Scan on internships i  (cost=0.00..3.25 rows=22 width=99) (actual time=0.012..0.038 rows=23.00 loops=1)
+                    Filter: ((stipend_amount >= 25000.00) AND ((status)::text = 'ACTIVE'::text) AND (((internship_type)::text = 'REMOTE'::text) OR ((location)::text ~~* '%Bengaluru%'::text)) AND (deadline >= CURRENT_DATE))
+                    Rows Removed by Filter: 27
+                    Buffers: shared hit=2
+              ->  Hash  (cost=1.15..1.15 rows=15 width=44) (actual time=0.017..0.017 rows=15.00 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 10kB
+                    Buffers: shared hit=1
+                    ->  Seq Scan on companies c  (cost=0.00..1.15 rows=15 width=44) (actual time=0.007..0.009 rows=15.00 loops=1)
+                          Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=324
+Planning Time: 1.213 ms
+Execution Time: 0.150 ms

@@ -1,0 +1,69 @@
+=== R01 run 1 ===
+Nested Loop Left Join  (cost=3.41..8.91 rows=1 width=265) (actual time=0.057..0.090 rows=1.00 loops=1)
+  Buffers: shared hit=8
+  ->  Hash Join  (cost=3.26..8.54 rows=1 width=164) (actual time=0.051..0.083 rows=1.00 loops=1)
+        Hash Cond: (sp.user_id = u.user_id)
+        Buffers: shared hit=6
+        ->  Seq Scan on student_profiles sp  (cost=0.00..5.00 rows=100 width=140) (actual time=0.017..0.037 rows=100.00 loops=1)
+              Buffers: shared hit=4
+        ->  Hash  (cost=3.25..3.25 rows=1 width=40) (actual time=0.020..0.021 rows=1.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=2
+              ->  Seq Scan on users u  (cost=0.00..3.25 rows=1 width=40) (actual time=0.005..0.015 rows=1.00 loops=1)
+                    Filter: ((email)::text = 'aravind.sharma@example.edu'::text)
+                    Rows Removed by Filter: 99
+                    Buffers: shared hit=2
+  ->  Index Scan using idx_resumes_student_active on resumes r  (cost=0.14..0.36 rows=1 width=117) (actual time=0.004..0.004 rows=1.00 loops=1)
+        Index Cond: ((student_id = sp.student_id) AND (is_active = true))
+        Index Searches: 1
+        Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=378
+Planning Time: 4.132 ms
+Execution Time: 0.140 ms
+=== R01 run 2 ===
+Nested Loop Left Join  (cost=3.41..8.91 rows=1 width=265) (actual time=0.071..0.114 rows=1.00 loops=1)
+  Buffers: shared hit=8
+  ->  Hash Join  (cost=3.26..8.54 rows=1 width=164) (actual time=0.062..0.104 rows=1.00 loops=1)
+        Hash Cond: (sp.user_id = u.user_id)
+        Buffers: shared hit=6
+        ->  Seq Scan on student_profiles sp  (cost=0.00..5.00 rows=100 width=140) (actual time=0.017..0.033 rows=100.00 loops=1)
+              Buffers: shared hit=4
+        ->  Hash  (cost=3.25..3.25 rows=1 width=40) (actual time=0.032..0.033 rows=1.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=2
+              ->  Seq Scan on users u  (cost=0.00..3.25 rows=1 width=40) (actual time=0.009..0.024 rows=1.00 loops=1)
+                    Filter: ((email)::text = 'aravind.sharma@example.edu'::text)
+                    Rows Removed by Filter: 99
+                    Buffers: shared hit=2
+  ->  Index Scan using idx_resumes_student_active on resumes r  (cost=0.14..0.36 rows=1 width=117) (actual time=0.006..0.006 rows=1.00 loops=1)
+        Index Cond: ((student_id = sp.student_id) AND (is_active = true))
+        Index Searches: 1
+        Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=388
+Planning Time: 1.705 ms
+Execution Time: 0.211 ms
+=== R01 run 3 ===
+Nested Loop Left Join  (cost=3.41..8.91 rows=1 width=265) (actual time=0.043..0.064 rows=1.00 loops=1)
+  Buffers: shared hit=8
+  ->  Hash Join  (cost=3.26..8.54 rows=1 width=164) (actual time=0.037..0.058 rows=1.00 loops=1)
+        Hash Cond: (sp.user_id = u.user_id)
+        Buffers: shared hit=6
+        ->  Seq Scan on student_profiles sp  (cost=0.00..5.00 rows=100 width=140) (actual time=0.012..0.021 rows=100.00 loops=1)
+              Buffers: shared hit=4
+        ->  Hash  (cost=3.25..3.25 rows=1 width=40) (actual time=0.018..0.018 rows=1.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=2
+              ->  Seq Scan on users u  (cost=0.00..3.25 rows=1 width=40) (actual time=0.006..0.013 rows=1.00 loops=1)
+                    Filter: ((email)::text = 'aravind.sharma@example.edu'::text)
+                    Rows Removed by Filter: 99
+                    Buffers: shared hit=2
+  ->  Index Scan using idx_resumes_student_active on resumes r  (cost=0.14..0.36 rows=1 width=117) (actual time=0.003..0.003 rows=1.00 loops=1)
+        Index Cond: ((student_id = sp.student_id) AND (is_active = true))
+        Index Searches: 1
+        Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=388
+Planning Time: 2.436 ms
+Execution Time: 0.124 ms

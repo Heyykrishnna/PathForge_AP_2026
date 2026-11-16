@@ -1,0 +1,87 @@
+=== R24 run 1 ===
+Sort  (cost=27.64..27.90 rows=103 width=62) (actual time=0.299..0.304 rows=104.00 loops=1)
+  Sort Key: ss.years_experience DESC
+  Sort Method: quicksort  Memory: 33kB
+  Buffers: shared hit=16
+  ->  Hash Join  (cost=8.04..24.20 rows=103 width=62) (actual time=0.095..0.236 rows=104.00 loops=1)
+        Hash Cond: (ss.skill_id = s.skill_id)
+        Buffers: shared hit=13
+        ->  Hash Join  (cost=6.25..22.11 rows=103 width=69) (actual time=0.067..0.190 rows=104.00 loops=1)
+              Hash Cond: (ss.student_id = sp.student_id)
+              Buffers: shared hit=12
+              ->  Seq Scan on student_skills ss  (cost=0.00..15.57 rows=103 width=57) (actual time=0.011..0.116 rows=104.00 loops=1)
+                    Filter: (is_verified AND ((proficiency)::text = ANY ('{ADVANCED,EXPERT}'::text[])))
+                    Rows Removed by Filter: 502
+                    Buffers: shared hit=8
+              ->  Hash  (cost=5.00..5.00 rows=100 width=28) (actual time=0.047..0.047 rows=100.00 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 14kB
+                    Buffers: shared hit=4
+                    ->  Seq Scan on student_profiles sp  (cost=0.00..5.00 rows=100 width=28) (actual time=0.007..0.032 rows=100.00 loops=1)
+                          Buffers: shared hit=4
+        ->  Hash  (cost=1.35..1.35 rows=35 width=25) (actual time=0.021..0.021 rows=35.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 10kB
+              Buffers: shared hit=1
+              ->  Seq Scan on skills s  (cost=0.00..1.35 rows=35 width=25) (actual time=0.007..0.010 rows=35.00 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=402
+Planning Time: 1.610 ms
+Execution Time: 0.355 ms
+=== R24 run 2 ===
+Sort  (cost=27.64..27.90 rows=103 width=62) (actual time=0.224..0.229 rows=104.00 loops=1)
+  Sort Key: ss.years_experience DESC
+  Sort Method: quicksort  Memory: 33kB
+  Buffers: shared hit=16
+  ->  Hash Join  (cost=8.04..24.20 rows=103 width=62) (actual time=0.074..0.169 rows=104.00 loops=1)
+        Hash Cond: (ss.skill_id = s.skill_id)
+        Buffers: shared hit=13
+        ->  Hash Join  (cost=6.25..22.11 rows=103 width=69) (actual time=0.050..0.128 rows=104.00 loops=1)
+              Hash Cond: (ss.student_id = sp.student_id)
+              Buffers: shared hit=12
+              ->  Seq Scan on student_skills ss  (cost=0.00..15.57 rows=103 width=57) (actual time=0.006..0.067 rows=104.00 loops=1)
+                    Filter: (is_verified AND ((proficiency)::text = ANY ('{ADVANCED,EXPERT}'::text[])))
+                    Rows Removed by Filter: 502
+                    Buffers: shared hit=8
+              ->  Hash  (cost=5.00..5.00 rows=100 width=28) (actual time=0.036..0.037 rows=100.00 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 14kB
+                    Buffers: shared hit=4
+                    ->  Seq Scan on student_profiles sp  (cost=0.00..5.00 rows=100 width=28) (actual time=0.007..0.022 rows=100.00 loops=1)
+                          Buffers: shared hit=4
+        ->  Hash  (cost=1.35..1.35 rows=35 width=25) (actual time=0.018..0.019 rows=35.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 10kB
+              Buffers: shared hit=1
+              ->  Seq Scan on skills s  (cost=0.00..1.35 rows=35 width=25) (actual time=0.006..0.009 rows=35.00 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=402
+Planning Time: 1.421 ms
+Execution Time: 0.277 ms
+=== R24 run 3 ===
+Sort  (cost=27.64..27.90 rows=103 width=62) (actual time=0.254..0.259 rows=104.00 loops=1)
+  Sort Key: ss.years_experience DESC
+  Sort Method: quicksort  Memory: 33kB
+  Buffers: shared hit=16
+  ->  Hash Join  (cost=8.04..24.20 rows=103 width=62) (actual time=0.087..0.192 rows=104.00 loops=1)
+        Hash Cond: (ss.skill_id = s.skill_id)
+        Buffers: shared hit=13
+        ->  Hash Join  (cost=6.25..22.11 rows=103 width=69) (actual time=0.058..0.145 rows=104.00 loops=1)
+              Hash Cond: (ss.student_id = sp.student_id)
+              Buffers: shared hit=12
+              ->  Seq Scan on student_skills ss  (cost=0.00..15.57 rows=103 width=57) (actual time=0.009..0.075 rows=104.00 loops=1)
+                    Filter: (is_verified AND ((proficiency)::text = ANY ('{ADVANCED,EXPERT}'::text[])))
+                    Rows Removed by Filter: 502
+                    Buffers: shared hit=8
+              ->  Hash  (cost=5.00..5.00 rows=100 width=28) (actual time=0.041..0.041 rows=100.00 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 14kB
+                    Buffers: shared hit=4
+                    ->  Seq Scan on student_profiles sp  (cost=0.00..5.00 rows=100 width=28) (actual time=0.005..0.026 rows=100.00 loops=1)
+                          Buffers: shared hit=4
+        ->  Hash  (cost=1.35..1.35 rows=35 width=25) (actual time=0.022..0.022 rows=35.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 10kB
+              Buffers: shared hit=1
+              ->  Seq Scan on skills s  (cost=0.00..1.35 rows=35 width=25) (actual time=0.007..0.011 rows=35.00 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=402
+Planning Time: 1.521 ms
+Execution Time: 0.307 ms

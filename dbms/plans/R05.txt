@@ -1,0 +1,87 @@
+=== R05 run 1 ===
+Sort  (cost=15.12..15.22 rows=40 width=146) (actual time=0.242..0.245 rows=46.00 loops=1)
+  Sort Key: (CASE ir.requirement_type WHEN 'MANDATORY'::text THEN 1 WHEN 'PREFERRED'::text THEN 2 ELSE 3 END), ir.weight DESC
+  Sort Method: quicksort  Memory: 31kB
+  Buffers: shared hit=15
+  ->  Hash Left Join  (cost=4.51..14.05 rows=40 width=146) (actual time=0.110..0.188 rows=46.00 loops=1)
+        Hash Cond: (ir.skill_id = s.skill_id)
+        Buffers: shared hit=9
+        ->  Hash Join  (cost=2.73..11.95 rows=40 width=118) (actual time=0.071..0.137 rows=46.00 loops=1)
+              Hash Cond: (ir.internship_id = i.internship_id)
+              Buffers: shared hit=8
+              ->  Seq Scan on internship_requirements ir  (cost=0.00..8.51 rows=251 width=134) (actual time=0.010..0.044 rows=251.00 loops=1)
+                    Buffers: shared hit=6
+              ->  Hash  (cost=2.62..2.62 rows=8 width=16) (actual time=0.052..0.053 rows=9.00 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=2
+                    ->  Seq Scan on internships i  (cost=0.00..2.62 rows=8 width=16) (actual time=0.009..0.045 rows=9.00 loops=1)
+                          Filter: ((title)::text ~~* '%Backend%'::text)
+                          Rows Removed by Filter: 41
+                          Buffers: shared hit=2
+        ->  Hash  (cost=1.35..1.35 rows=35 width=33) (actual time=0.022..0.023 rows=35.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 11kB
+              Buffers: shared hit=1
+              ->  Seq Scan on skills s  (cost=0.00..1.35 rows=35 width=33) (actual time=0.007..0.011 rows=35.00 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=390
+Planning Time: 2.075 ms
+Execution Time: 0.322 ms
+=== R05 run 2 ===
+Sort  (cost=15.12..15.22 rows=40 width=146) (actual time=0.204..0.207 rows=46.00 loops=1)
+  Sort Key: (CASE ir.requirement_type WHEN 'MANDATORY'::text THEN 1 WHEN 'PREFERRED'::text THEN 2 ELSE 3 END), ir.weight DESC
+  Sort Method: quicksort  Memory: 31kB
+  Buffers: shared hit=15
+  ->  Hash Left Join  (cost=4.51..14.05 rows=40 width=146) (actual time=0.092..0.158 rows=46.00 loops=1)
+        Hash Cond: (ir.skill_id = s.skill_id)
+        Buffers: shared hit=9
+        ->  Hash Join  (cost=2.73..11.95 rows=40 width=118) (actual time=0.058..0.112 rows=46.00 loops=1)
+              Hash Cond: (ir.internship_id = i.internship_id)
+              Buffers: shared hit=8
+              ->  Seq Scan on internship_requirements ir  (cost=0.00..8.51 rows=251 width=134) (actual time=0.007..0.028 rows=251.00 loops=1)
+                    Buffers: shared hit=6
+              ->  Hash  (cost=2.62..2.62 rows=8 width=16) (actual time=0.043..0.044 rows=9.00 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=2
+                    ->  Seq Scan on internships i  (cost=0.00..2.62 rows=8 width=16) (actual time=0.006..0.037 rows=9.00 loops=1)
+                          Filter: ((title)::text ~~* '%Backend%'::text)
+                          Rows Removed by Filter: 41
+                          Buffers: shared hit=2
+        ->  Hash  (cost=1.35..1.35 rows=35 width=33) (actual time=0.019..0.019 rows=35.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 11kB
+              Buffers: shared hit=1
+              ->  Seq Scan on skills s  (cost=0.00..1.35 rows=35 width=33) (actual time=0.006..0.010 rows=35.00 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=390
+Planning Time: 1.482 ms
+Execution Time: 0.275 ms
+=== R05 run 3 ===
+Sort  (cost=15.12..15.22 rows=40 width=146) (actual time=0.190..0.193 rows=46.00 loops=1)
+  Sort Key: (CASE ir.requirement_type WHEN 'MANDATORY'::text THEN 1 WHEN 'PREFERRED'::text THEN 2 ELSE 3 END), ir.weight DESC
+  Sort Method: quicksort  Memory: 31kB
+  Buffers: shared hit=15
+  ->  Hash Left Join  (cost=4.51..14.05 rows=40 width=146) (actual time=0.089..0.145 rows=46.00 loops=1)
+        Hash Cond: (ir.skill_id = s.skill_id)
+        Buffers: shared hit=9
+        ->  Hash Join  (cost=2.73..11.95 rows=40 width=118) (actual time=0.061..0.106 rows=46.00 loops=1)
+              Hash Cond: (ir.internship_id = i.internship_id)
+              Buffers: shared hit=8
+              ->  Seq Scan on internship_requirements ir  (cost=0.00..8.51 rows=251 width=134) (actual time=0.010..0.028 rows=251.00 loops=1)
+                    Buffers: shared hit=6
+              ->  Hash  (cost=2.62..2.62 rows=8 width=16) (actual time=0.044..0.044 rows=9.00 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=2
+                    ->  Seq Scan on internships i  (cost=0.00..2.62 rows=8 width=16) (actual time=0.010..0.037 rows=9.00 loops=1)
+                          Filter: ((title)::text ~~* '%Backend%'::text)
+                          Rows Removed by Filter: 41
+                          Buffers: shared hit=2
+        ->  Hash  (cost=1.35..1.35 rows=35 width=33) (actual time=0.016..0.016 rows=35.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 11kB
+              Buffers: shared hit=1
+              ->  Seq Scan on skills s  (cost=0.00..1.35 rows=35 width=33) (actual time=0.005..0.008 rows=35.00 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=390
+Planning Time: 1.475 ms
+Execution Time: 0.270 ms

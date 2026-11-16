@@ -1,0 +1,111 @@
+=== R09 run 1 ===
+Sort  (cost=12.67..12.67 rows=1 width=172) (actual time=0.078..0.079 rows=1.00 loops=1)
+  Sort Key: (CASE sg.priority WHEN 'CRITICAL'::text THEN 1 WHEN 'IMPORTANT'::text THEN 2 ELSE 3 END)
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=14
+  InitPlan 1
+    ->  Limit  (cost=4.50..4.50 rows=1 width=24) (actual time=0.023..0.023 rows=1.00 loops=1)
+          Buffers: shared hit=6
+          ->  Sort  (cost=4.50..4.75 rows=100 width=24) (actual time=0.023..0.023 rows=1.00 loops=1)
+                Sort Key: evaluations.evaluated_at DESC
+                Sort Method: top-N heapsort  Memory: 25kB
+                Buffers: shared hit=6
+                ->  Seq Scan on evaluations  (cost=0.00..4.00 rows=100 width=24) (actual time=0.002..0.011 rows=100.00 loops=1)
+                      Buffers: shared hit=3
+  ->  Nested Loop  (cost=2.67..8.15 rows=1 width=172) (actual time=0.069..0.072 rows=1.00 loops=1)
+        Buffers: shared hit=11
+        ->  Hash Join  (cost=2.53..3.98 rows=1 width=184) (actual time=0.043..0.045 rows=1.00 loops=1)
+              Hash Cond: (s.skill_id = sg.skill_id)
+              Buffers: shared hit=9
+              ->  Seq Scan on skills s  (cost=0.00..1.35 rows=35 width=33) (actual time=0.002..0.003 rows=35.00 loops=1)
+                    Buffers: shared hit=1
+              ->  Hash  (cost=2.51..2.51 rows=1 width=183) (actual time=0.036..0.036 rows=1.00 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=8
+                    ->  Seq Scan on skill_gaps sg  (cost=0.00..2.51 rows=1 width=183) (actual time=0.030..0.034 rows=1.00 loops=1)
+                          Filter: (evaluation_id = (InitPlan 1).col1)
+                          Rows Removed by Filter: 40
+                          Buffers: shared hit=8
+        ->  Index Only Scan using evaluations_pkey on evaluations e  (cost=0.14..4.16 rows=1 width=16) (actual time=0.023..0.023 rows=1.00 loops=1)
+              Index Cond: (evaluation_id = (InitPlan 1).col1)
+              Heap Fetches: 0
+              Index Searches: 1
+              Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=379
+Planning Time: 0.664 ms
+Execution Time: 0.113 ms
+=== R09 run 2 ===
+Sort  (cost=12.67..12.67 rows=1 width=172) (actual time=0.215..0.217 rows=1.00 loops=1)
+  Sort Key: (CASE sg.priority WHEN 'CRITICAL'::text THEN 1 WHEN 'IMPORTANT'::text THEN 2 ELSE 3 END)
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=14
+  InitPlan 1
+    ->  Limit  (cost=4.50..4.50 rows=1 width=24) (actual time=0.039..0.039 rows=1.00 loops=1)
+          Buffers: shared hit=6
+          ->  Sort  (cost=4.50..4.75 rows=100 width=24) (actual time=0.038..0.038 rows=1.00 loops=1)
+                Sort Key: evaluations.evaluated_at DESC
+                Sort Method: top-N heapsort  Memory: 25kB
+                Buffers: shared hit=6
+                ->  Seq Scan on evaluations  (cost=0.00..4.00 rows=100 width=24) (actual time=0.003..0.017 rows=100.00 loops=1)
+                      Buffers: shared hit=3
+  ->  Nested Loop  (cost=2.67..8.15 rows=1 width=172) (actual time=0.196..0.202 rows=1.00 loops=1)
+        Buffers: shared hit=11
+        ->  Hash Join  (cost=2.53..3.98 rows=1 width=184) (actual time=0.073..0.079 rows=1.00 loops=1)
+              Hash Cond: (s.skill_id = sg.skill_id)
+              Buffers: shared hit=9
+              ->  Seq Scan on skills s  (cost=0.00..1.35 rows=35 width=33) (actual time=0.004..0.006 rows=35.00 loops=1)
+                    Buffers: shared hit=1
+              ->  Hash  (cost=2.51..2.51 rows=1 width=183) (actual time=0.060..0.061 rows=1.00 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=8
+                    ->  Seq Scan on skill_gaps sg  (cost=0.00..2.51 rows=1 width=183) (actual time=0.051..0.056 rows=1.00 loops=1)
+                          Filter: (evaluation_id = (InitPlan 1).col1)
+                          Rows Removed by Filter: 40
+                          Buffers: shared hit=8
+        ->  Index Only Scan using evaluations_pkey on evaluations e  (cost=0.14..4.16 rows=1 width=16) (actual time=0.117..0.118 rows=1.00 loops=1)
+              Index Cond: (evaluation_id = (InitPlan 1).col1)
+              Heap Fetches: 0
+              Index Searches: 1
+              Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=379
+Planning Time: 1.311 ms
+Execution Time: 0.268 ms
+=== R09 run 3 ===
+Sort  (cost=12.67..12.67 rows=1 width=172) (actual time=0.150..0.151 rows=1.00 loops=1)
+  Sort Key: (CASE sg.priority WHEN 'CRITICAL'::text THEN 1 WHEN 'IMPORTANT'::text THEN 2 ELSE 3 END)
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=14
+  InitPlan 1
+    ->  Limit  (cost=4.50..4.50 rows=1 width=24) (actual time=0.045..0.046 rows=1.00 loops=1)
+          Buffers: shared hit=6
+          ->  Sort  (cost=4.50..4.75 rows=100 width=24) (actual time=0.045..0.045 rows=1.00 loops=1)
+                Sort Key: evaluations.evaluated_at DESC
+                Sort Method: top-N heapsort  Memory: 25kB
+                Buffers: shared hit=6
+                ->  Seq Scan on evaluations  (cost=0.00..4.00 rows=100 width=24) (actual time=0.004..0.018 rows=100.00 loops=1)
+                      Buffers: shared hit=3
+  ->  Nested Loop  (cost=2.67..8.15 rows=1 width=172) (actual time=0.132..0.136 rows=1.00 loops=1)
+        Buffers: shared hit=11
+        ->  Hash Join  (cost=2.53..3.98 rows=1 width=184) (actual time=0.084..0.087 rows=1.00 loops=1)
+              Hash Cond: (s.skill_id = sg.skill_id)
+              Buffers: shared hit=9
+              ->  Seq Scan on skills s  (cost=0.00..1.35 rows=35 width=33) (actual time=0.004..0.006 rows=35.00 loops=1)
+                    Buffers: shared hit=1
+              ->  Hash  (cost=2.51..2.51 rows=1 width=183) (actual time=0.071..0.071 rows=1.00 loops=1)
+                    Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                    Buffers: shared hit=8
+                    ->  Seq Scan on skill_gaps sg  (cost=0.00..2.51 rows=1 width=183) (actual time=0.060..0.066 rows=1.00 loops=1)
+                          Filter: (evaluation_id = (InitPlan 1).col1)
+                          Rows Removed by Filter: 40
+                          Buffers: shared hit=8
+        ->  Index Only Scan using evaluations_pkey on evaluations e  (cost=0.14..4.16 rows=1 width=16) (actual time=0.044..0.044 rows=1.00 loops=1)
+              Index Cond: (evaluation_id = (InitPlan 1).col1)
+              Heap Fetches: 0
+              Index Searches: 1
+              Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=379
+Planning Time: 1.161 ms
+Execution Time: 0.209 ms

@@ -1,0 +1,105 @@
+=== R06 run 1 ===
+Limit  (cost=23.57..23.59 rows=10 width=288) (actual time=0.275..0.277 rows=10.00 loops=1)
+  Buffers: shared hit=12
+  ->  Sort  (cost=23.57..24.15 rows=231 width=288) (actual time=0.274..0.275 rows=10.00 loops=1)
+        Sort Key: i.created_at DESC
+        Sort Method: top-N heapsort  Memory: 30kB
+        Buffers: shared hit=12
+        ->  HashAggregate  (cost=16.27..18.58 rows=231 width=288) (actual time=0.235..0.245 rows=46.00 loops=1)
+              Group Key: i.internship_id, c.name
+              Batches: 1  Memory Usage: 48kB
+              Buffers: shared hit=9
+              ->  Hash Join  (cost=4.54..14.54 rows=231 width=296) (actual time=0.058..0.170 rows=231.00 loops=1)
+                    Hash Cond: (i.company_id = c.company_id)
+                    Buffers: shared hit=9
+                    ->  Hash Right Join  (cost=3.20..12.42 rows=231 width=238) (actual time=0.036..0.108 rows=231.00 loops=1)
+                          Hash Cond: (ir.internship_id = i.internship_id)
+                          Buffers: shared hit=8
+                          ->  Seq Scan on internship_requirements ir  (cost=0.00..8.51 rows=251 width=32) (actual time=0.002..0.021 rows=251.00 loops=1)
+                                Buffers: shared hit=6
+                          ->  Hash  (cost=2.62..2.62 rows=46 width=222) (actual time=0.025..0.026 rows=46.00 loops=1)
+                                Buckets: 1024  Batches: 1  Memory Usage: 20kB
+                                Buffers: shared hit=2
+                                ->  Seq Scan on internships i  (cost=0.00..2.62 rows=46 width=222) (actual time=0.004..0.014 rows=46.00 loops=1)
+                                      Filter: ((status)::text = 'ACTIVE'::text)
+                                      Rows Removed by Filter: 4
+                                      Buffers: shared hit=2
+                    ->  Hash  (cost=1.15..1.15 rows=15 width=74) (actual time=0.017..0.017 rows=15.00 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 10kB
+                          Buffers: shared hit=1
+                          ->  Seq Scan on companies c  (cost=0.00..1.15 rows=15 width=74) (actual time=0.009..0.011 rows=15.00 loops=1)
+                                Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=292
+Planning Time: 1.150 ms
+Execution Time: 0.350 ms
+=== R06 run 2 ===
+Limit  (cost=23.57..23.59 rows=10 width=288) (actual time=0.357..0.360 rows=10.00 loops=1)
+  Buffers: shared hit=12
+  ->  Sort  (cost=23.57..24.15 rows=231 width=288) (actual time=0.356..0.358 rows=10.00 loops=1)
+        Sort Key: i.created_at DESC
+        Sort Method: top-N heapsort  Memory: 30kB
+        Buffers: shared hit=12
+        ->  HashAggregate  (cost=16.27..18.58 rows=231 width=288) (actual time=0.304..0.315 rows=46.00 loops=1)
+              Group Key: i.internship_id, c.name
+              Batches: 1  Memory Usage: 48kB
+              Buffers: shared hit=9
+              ->  Hash Join  (cost=4.54..14.54 rows=231 width=296) (actual time=0.098..0.229 rows=231.00 loops=1)
+                    Hash Cond: (i.company_id = c.company_id)
+                    Buffers: shared hit=9
+                    ->  Hash Right Join  (cost=3.20..12.42 rows=231 width=238) (actual time=0.052..0.138 rows=231.00 loops=1)
+                          Hash Cond: (ir.internship_id = i.internship_id)
+                          Buffers: shared hit=8
+                          ->  Seq Scan on internship_requirements ir  (cost=0.00..8.51 rows=251 width=32) (actual time=0.005..0.027 rows=251.00 loops=1)
+                                Buffers: shared hit=6
+                          ->  Hash  (cost=2.62..2.62 rows=46 width=222) (actual time=0.034..0.035 rows=46.00 loops=1)
+                                Buckets: 1024  Batches: 1  Memory Usage: 20kB
+                                Buffers: shared hit=2
+                                ->  Seq Scan on internships i  (cost=0.00..2.62 rows=46 width=222) (actual time=0.008..0.021 rows=46.00 loops=1)
+                                      Filter: ((status)::text = 'ACTIVE'::text)
+                                      Rows Removed by Filter: 4
+                                      Buffers: shared hit=2
+                    ->  Hash  (cost=1.15..1.15 rows=15 width=74) (actual time=0.038..0.038 rows=15.00 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 10kB
+                          Buffers: shared hit=1
+                          ->  Seq Scan on companies c  (cost=0.00..1.15 rows=15 width=74) (actual time=0.020..0.021 rows=15.00 loops=1)
+                                Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=292
+Planning Time: 1.451 ms
+Execution Time: 0.462 ms
+=== R06 run 3 ===
+Limit  (cost=23.57..23.59 rows=10 width=288) (actual time=0.541..0.544 rows=10.00 loops=1)
+  Buffers: shared hit=12
+  ->  Sort  (cost=23.57..24.15 rows=231 width=288) (actual time=0.540..0.542 rows=10.00 loops=1)
+        Sort Key: i.created_at DESC
+        Sort Method: top-N heapsort  Memory: 30kB
+        Buffers: shared hit=12
+        ->  HashAggregate  (cost=16.27..18.58 rows=231 width=288) (actual time=0.495..0.506 rows=46.00 loops=1)
+              Group Key: i.internship_id, c.name
+              Batches: 1  Memory Usage: 48kB
+              Buffers: shared hit=9
+              ->  Hash Join  (cost=4.54..14.54 rows=231 width=296) (actual time=0.297..0.421 rows=231.00 loops=1)
+                    Hash Cond: (i.company_id = c.company_id)
+                    Buffers: shared hit=9
+                    ->  Hash Right Join  (cost=3.20..12.42 rows=231 width=238) (actual time=0.257..0.338 rows=231.00 loops=1)
+                          Hash Cond: (ir.internship_id = i.internship_id)
+                          Buffers: shared hit=8
+                          ->  Seq Scan on internship_requirements ir  (cost=0.00..8.51 rows=251 width=32) (actual time=0.214..0.234 rows=251.00 loops=1)
+                                Buffers: shared hit=6
+                          ->  Hash  (cost=2.62..2.62 rows=46 width=222) (actual time=0.031..0.032 rows=46.00 loops=1)
+                                Buckets: 1024  Batches: 1  Memory Usage: 20kB
+                                Buffers: shared hit=2
+                                ->  Seq Scan on internships i  (cost=0.00..2.62 rows=46 width=222) (actual time=0.007..0.017 rows=46.00 loops=1)
+                                      Filter: ((status)::text = 'ACTIVE'::text)
+                                      Rows Removed by Filter: 4
+                                      Buffers: shared hit=2
+                    ->  Hash  (cost=1.15..1.15 rows=15 width=74) (actual time=0.033..0.033 rows=15.00 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 10kB
+                          Buffers: shared hit=1
+                          ->  Seq Scan on companies c  (cost=0.00..1.15 rows=15 width=74) (actual time=0.024..0.026 rows=15.00 loops=1)
+                                Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=292
+Planning Time: 1.376 ms
+Execution Time: 0.633 ms

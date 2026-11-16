@@ -1,0 +1,78 @@
+=== R22 run 1 ===
+HashAggregate  (cost=7.35..7.37 rows=1 width=110) (actual time=0.082..0.084 rows=2.00 loops=1)
+  Group Key: r.roadmap_id
+  Batches: 1  Memory Usage: 32kB
+  Buffers: shared hit=7
+  InitPlan 1
+    ->  Limit  (cost=0.00..0.05 rows=1 width=16) (actual time=0.008..0.009 rows=1.00 loops=1)
+          Buffers: shared hit=2
+          ->  Seq Scan on student_profiles  (cost=0.00..5.00 rows=100 width=16) (actual time=0.008..0.008 rows=1.00 loops=1)
+                Buffers: shared hit=2
+  ->  Hash Join  (cost=1.27..7.21 rows=7 width=67) (actual time=0.037..0.066 rows=14.00 loops=1)
+        Hash Cond: (rt.roadmap_id = r.roadmap_id)
+        Buffers: shared hit=7
+        ->  Seq Scan on roadmap_tasks rt  (cost=0.00..5.47 rows=147 width=37) (actual time=0.007..0.019 rows=147.00 loops=1)
+              Buffers: shared hit=4
+        ->  Hash  (cost=1.26..1.26 rows=1 width=46) (actual time=0.022..0.022 rows=2.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=3
+              ->  Seq Scan on roadmaps r  (cost=0.00..1.26 rows=1 width=46) (actual time=0.016..0.018 rows=2.00 loops=1)
+                    Filter: (student_id = (InitPlan 1).col1)
+                    Rows Removed by Filter: 19
+                    Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=262
+Planning Time: 1.303 ms
+Execution Time: 0.159 ms
+=== R22 run 2 ===
+HashAggregate  (cost=7.35..7.37 rows=1 width=110) (actual time=0.172..0.174 rows=2.00 loops=1)
+  Group Key: r.roadmap_id
+  Batches: 1  Memory Usage: 32kB
+  Buffers: shared hit=7
+  InitPlan 1
+    ->  Limit  (cost=0.00..0.05 rows=1 width=16) (actual time=0.020..0.021 rows=1.00 loops=1)
+          Buffers: shared hit=2
+          ->  Seq Scan on student_profiles  (cost=0.00..5.00 rows=100 width=16) (actual time=0.018..0.018 rows=1.00 loops=1)
+                Buffers: shared hit=2
+  ->  Hash Join  (cost=1.27..7.21 rows=7 width=67) (actual time=0.147..0.160 rows=14.00 loops=1)
+        Hash Cond: (rt.roadmap_id = r.roadmap_id)
+        Buffers: shared hit=7
+        ->  Seq Scan on roadmap_tasks rt  (cost=0.00..5.47 rows=147 width=37) (actual time=0.054..0.060 rows=147.00 loops=1)
+              Buffers: shared hit=4
+        ->  Hash  (cost=1.26..1.26 rows=1 width=46) (actual time=0.072..0.072 rows=2.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=3
+              ->  Seq Scan on roadmaps r  (cost=0.00..1.26 rows=1 width=46) (actual time=0.051..0.052 rows=2.00 loops=1)
+                    Filter: (student_id = (InitPlan 1).col1)
+                    Rows Removed by Filter: 19
+                    Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=262
+Planning Time: 1.879 ms
+Execution Time: 0.277 ms
+=== R22 run 3 ===
+HashAggregate  (cost=7.35..7.37 rows=1 width=110) (actual time=0.081..0.083 rows=2.00 loops=1)
+  Group Key: r.roadmap_id
+  Batches: 1  Memory Usage: 32kB
+  Buffers: shared hit=7
+  InitPlan 1
+    ->  Limit  (cost=0.00..0.05 rows=1 width=16) (actual time=0.008..0.008 rows=1.00 loops=1)
+          Buffers: shared hit=2
+          ->  Seq Scan on student_profiles  (cost=0.00..5.00 rows=100 width=16) (actual time=0.007..0.007 rows=1.00 loops=1)
+                Buffers: shared hit=2
+  ->  Hash Join  (cost=1.27..7.21 rows=7 width=67) (actual time=0.034..0.062 rows=14.00 loops=1)
+        Hash Cond: (rt.roadmap_id = r.roadmap_id)
+        Buffers: shared hit=7
+        ->  Seq Scan on roadmap_tasks rt  (cost=0.00..5.47 rows=147 width=37) (actual time=0.005..0.017 rows=147.00 loops=1)
+              Buffers: shared hit=4
+        ->  Hash  (cost=1.26..1.26 rows=1 width=46) (actual time=0.020..0.020 rows=2.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=3
+              ->  Seq Scan on roadmaps r  (cost=0.00..1.26 rows=1 width=46) (actual time=0.014..0.016 rows=2.00 loops=1)
+                    Filter: (student_id = (InitPlan 1).col1)
+                    Rows Removed by Filter: 19
+                    Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=262
+Planning Time: 0.444 ms
+Execution Time: 0.167 ms

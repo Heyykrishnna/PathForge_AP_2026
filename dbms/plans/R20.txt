@@ -1,0 +1,111 @@
+=== R20 run 1 ===
+Sort  (cost=11.05..11.06 rows=4 width=96) (actual time=0.192..0.194 rows=6.00 loops=1)
+  Sort Key: ((i.deadline - CURRENT_DATE))
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=20
+  ->  Hash Join  (cost=4.68..11.01 rows=4 width=96) (actual time=0.122..0.155 rows=6.00 loops=1)
+        Hash Cond: (i.company_id = c.company_id)
+        Buffers: shared hit=17
+        ->  Nested Loop  (cost=3.34..9.65 rows=4 width=100) (actual time=0.071..0.101 rows=6.00 loops=1)
+              Buffers: shared hit=16
+              ->  Hash Join  (cost=3.20..6.33 rows=4 width=88) (actual time=0.059..0.078 rows=6.00 loops=1)
+                    Hash Cond: (a.internship_id = i.internship_id)
+                    Buffers: shared hit=4
+                    ->  Seq Scan on applications a  (cost=0.00..3.02 rows=36 width=41) (actual time=0.014..0.029 rows=36.00 loops=1)
+                          Filter: ((current_stage)::text = ANY ('{SAVED,RESEARCHING,PREPARING,READY_TO_APPLY}'::text[]))
+                          Rows Removed by Filter: 32
+                          Buffers: shared hit=2
+                    ->  Hash  (cost=3.12..3.12 rows=6 width=79) (actual time=0.031..0.032 rows=5.00 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                          Buffers: shared hit=2
+                          ->  Seq Scan on internships i  (cost=0.00..3.12 rows=6 width=79) (actual time=0.011..0.026 rows=5.00 loops=1)
+                                Filter: ((deadline >= CURRENT_DATE) AND (deadline <= (CURRENT_DATE + '7 days'::interval)))
+                                Rows Removed by Filter: 45
+                                Buffers: shared hit=2
+              ->  Index Scan using student_profiles_pkey on student_profiles sp  (cost=0.14..0.83 rows=1 width=28) (actual time=0.003..0.003 rows=1.00 loops=6)
+                    Index Cond: (student_id = a.student_id)
+                    Index Searches: 6
+                    Buffers: shared hit=12
+        ->  Hash  (cost=1.15..1.15 rows=15 width=24) (actual time=0.036..0.036 rows=15.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=1
+              ->  Seq Scan on companies c  (cost=0.00..1.15 rows=15 width=24) (actual time=0.021..0.023 rows=15.00 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=500
+Planning Time: 3.149 ms
+Execution Time: 0.292 ms
+=== R20 run 2 ===
+Sort  (cost=11.05..11.06 rows=4 width=96) (actual time=0.154..0.156 rows=6.00 loops=1)
+  Sort Key: ((i.deadline - CURRENT_DATE))
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=20
+  ->  Hash Join  (cost=4.68..11.01 rows=4 width=96) (actual time=0.095..0.125 rows=6.00 loops=1)
+        Hash Cond: (i.company_id = c.company_id)
+        Buffers: shared hit=17
+        ->  Nested Loop  (cost=3.34..9.65 rows=4 width=100) (actual time=0.055..0.084 rows=6.00 loops=1)
+              Buffers: shared hit=16
+              ->  Hash Join  (cost=3.20..6.33 rows=4 width=88) (actual time=0.048..0.066 rows=6.00 loops=1)
+                    Hash Cond: (a.internship_id = i.internship_id)
+                    Buffers: shared hit=4
+                    ->  Seq Scan on applications a  (cost=0.00..3.02 rows=36 width=41) (actual time=0.007..0.021 rows=36.00 loops=1)
+                          Filter: ((current_stage)::text = ANY ('{SAVED,RESEARCHING,PREPARING,READY_TO_APPLY}'::text[]))
+                          Rows Removed by Filter: 32
+                          Buffers: shared hit=2
+                    ->  Hash  (cost=3.12..3.12 rows=6 width=79) (actual time=0.026..0.027 rows=5.00 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                          Buffers: shared hit=2
+                          ->  Seq Scan on internships i  (cost=0.00..3.12 rows=6 width=79) (actual time=0.008..0.022 rows=5.00 loops=1)
+                                Filter: ((deadline >= CURRENT_DATE) AND (deadline <= (CURRENT_DATE + '7 days'::interval)))
+                                Rows Removed by Filter: 45
+                                Buffers: shared hit=2
+              ->  Index Scan using student_profiles_pkey on student_profiles sp  (cost=0.14..0.83 rows=1 width=28) (actual time=0.002..0.002 rows=1.00 loops=6)
+                    Index Cond: (student_id = a.student_id)
+                    Index Searches: 6
+                    Buffers: shared hit=12
+        ->  Hash  (cost=1.15..1.15 rows=15 width=24) (actual time=0.029..0.029 rows=15.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=1
+              ->  Seq Scan on companies c  (cost=0.00..1.15 rows=15 width=24) (actual time=0.016..0.018 rows=15.00 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=500
+Planning Time: 2.044 ms
+Execution Time: 0.375 ms
+=== R20 run 3 ===
+Sort  (cost=11.05..11.06 rows=4 width=96) (actual time=0.105..0.106 rows=6.00 loops=1)
+  Sort Key: ((i.deadline - CURRENT_DATE))
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=20
+  ->  Hash Join  (cost=4.68..11.01 rows=4 width=96) (actual time=0.061..0.085 rows=6.00 loops=1)
+        Hash Cond: (i.company_id = c.company_id)
+        Buffers: shared hit=17
+        ->  Nested Loop  (cost=3.34..9.65 rows=4 width=100) (actual time=0.036..0.059 rows=6.00 loops=1)
+              Buffers: shared hit=16
+              ->  Hash Join  (cost=3.20..6.33 rows=4 width=88) (actual time=0.031..0.046 rows=6.00 loops=1)
+                    Hash Cond: (a.internship_id = i.internship_id)
+                    Buffers: shared hit=4
+                    ->  Seq Scan on applications a  (cost=0.00..3.02 rows=36 width=41) (actual time=0.005..0.016 rows=36.00 loops=1)
+                          Filter: ((current_stage)::text = ANY ('{SAVED,RESEARCHING,PREPARING,READY_TO_APPLY}'::text[]))
+                          Rows Removed by Filter: 32
+                          Buffers: shared hit=2
+                    ->  Hash  (cost=3.12..3.12 rows=6 width=79) (actual time=0.020..0.020 rows=5.00 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                          Buffers: shared hit=2
+                          ->  Seq Scan on internships i  (cost=0.00..3.12 rows=6 width=79) (actual time=0.005..0.016 rows=5.00 loops=1)
+                                Filter: ((deadline >= CURRENT_DATE) AND (deadline <= (CURRENT_DATE + '7 days'::interval)))
+                                Rows Removed by Filter: 45
+                                Buffers: shared hit=2
+              ->  Index Scan using student_profiles_pkey on student_profiles sp  (cost=0.14..0.83 rows=1 width=28) (actual time=0.002..0.002 rows=1.00 loops=6)
+                    Index Cond: (student_id = a.student_id)
+                    Index Searches: 6
+                    Buffers: shared hit=12
+        ->  Hash  (cost=1.15..1.15 rows=15 width=24) (actual time=0.017..0.017 rows=15.00 loops=1)
+              Buckets: 1024  Batches: 1  Memory Usage: 9kB
+              Buffers: shared hit=1
+              ->  Seq Scan on companies c  (cost=0.00..1.15 rows=15 width=24) (actual time=0.010..0.011 rows=15.00 loops=1)
+                    Buffers: shared hit=1
+Planning:
+  Buffers: shared hit=500
+Planning Time: 1.622 ms
+Execution Time: 0.157 ms

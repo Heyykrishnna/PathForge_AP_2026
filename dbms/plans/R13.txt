@@ -1,0 +1,141 @@
+=== R13 run 1 ===
+Sort  (cost=14.58..14.58 rows=1 width=99) (actual time=0.169..0.171 rows=2.00 loops=1)
+  Sort Key: (CASE a.current_stage WHEN 'OFFER'::text THEN 1 WHEN 'INTERVIEW'::text THEN 2 WHEN 'ASSESSMENT'::text THEN 3 WHEN 'APPLIED'::text THEN 4 WHEN 'READY_TO_APPLY'::text THEN 5 WHEN 'PREPARING'::text THEN 6 WHEN 'RESEARCHING'::text THEN 7 WHEN 'SAVED'::text THEN 8 ELSE 9 END), i.deadline
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=22
+  InitPlan 1
+    ->  Limit  (cost=0.00..0.05 rows=1 width=16) (actual time=0.005..0.005 rows=1.00 loops=1)
+          Buffers: shared hit=2
+          ->  Seq Scan on student_profiles  (cost=0.00..5.00 rows=100 width=16) (actual time=0.004..0.004 rows=1.00 loops=1)
+                Buffers: shared hit=2
+  ->  Nested Loop  (cost=5.79..14.52 rows=1 width=99) (actual time=0.125..0.150 rows=2.00 loops=1)
+        Buffers: shared hit=16
+        ->  Nested Loop  (cost=5.65..10.33 rows=1 width=111) (actual time=0.063..0.087 rows=2.00 loops=1)
+              Buffers: shared hit=13
+              ->  Hash Right Join  (cost=5.52..9.90 rows=1 width=119) (actual time=0.058..0.080 rows=2.00 loops=1)
+                    Hash Cond: (e.evaluation_id = a.evaluation_id)
+                    Buffers: shared hit=9
+                    ->  Seq Scan on evaluations e  (cost=0.00..4.00 rows=100 width=21) (actual time=0.002..0.011 rows=100.00 loops=1)
+                          Buffers: shared hit=3
+                    ->  Hash  (cost=5.50..5.50 rows=1 width=130) (actual time=0.050..0.051 rows=2.00 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                          Buffers: shared hit=6
+                          ->  Hash Join  (cost=2.86..5.50 rows=1 width=130) (actual time=0.038..0.048 rows=2.00 loops=1)
+                                Hash Cond: (i.internship_id = a.internship_id)
+                                Buffers: shared hit=6
+                                ->  Seq Scan on internships i  (cost=0.00..2.50 rows=50 width=79) (actual time=0.004..0.008 rows=50.00 loops=1)
+                                      Buffers: shared hit=2
+                                ->  Hash  (cost=2.85..2.85 rows=1 width=83) (actual time=0.026..0.026 rows=2.00 loops=1)
+                                      Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                      Buffers: shared hit=4
+                                      ->  Seq Scan on applications a  (cost=0.00..2.85 rows=1 width=83) (actual time=0.014..0.022 rows=2.00 loops=1)
+                                            Filter: (student_id = (InitPlan 1).col1)
+                                            Rows Removed by Filter: 66
+                                            Buffers: shared hit=4
+              ->  Index Scan using companies_pkey on companies c  (cost=0.14..0.39 rows=1 width=24) (actual time=0.002..0.002 rows=1.00 loops=2)
+                    Index Cond: (company_id = i.company_id)
+                    Index Searches: 2
+                    Buffers: shared hit=4
+        ->  Index Only Scan using student_profiles_pkey on student_profiles sp  (cost=0.14..4.16 rows=1 width=16) (actual time=0.028..0.029 rows=1.00 loops=2)
+              Index Cond: (student_id = (InitPlan 1).col1)
+              Heap Fetches: 0
+              Index Searches: 2
+              Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=495
+Planning Time: 2.398 ms
+Execution Time: 0.235 ms
+=== R13 run 2 ===
+Sort  (cost=14.58..14.58 rows=1 width=99) (actual time=0.072..0.073 rows=2.00 loops=1)
+  Sort Key: (CASE a.current_stage WHEN 'OFFER'::text THEN 1 WHEN 'INTERVIEW'::text THEN 2 WHEN 'ASSESSMENT'::text THEN 3 WHEN 'APPLIED'::text THEN 4 WHEN 'READY_TO_APPLY'::text THEN 5 WHEN 'PREPARING'::text THEN 6 WHEN 'RESEARCHING'::text THEN 7 WHEN 'SAVED'::text THEN 8 ELSE 9 END), i.deadline
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=22
+  InitPlan 1
+    ->  Limit  (cost=0.00..0.05 rows=1 width=16) (actual time=0.003..0.003 rows=1.00 loops=1)
+          Buffers: shared hit=2
+          ->  Seq Scan on student_profiles  (cost=0.00..5.00 rows=100 width=16) (actual time=0.002..0.002 rows=1.00 loops=1)
+                Buffers: shared hit=2
+  ->  Nested Loop  (cost=5.79..14.52 rows=1 width=99) (actual time=0.052..0.064 rows=2.00 loops=1)
+        Buffers: shared hit=16
+        ->  Nested Loop  (cost=5.65..10.33 rows=1 width=111) (actual time=0.031..0.042 rows=2.00 loops=1)
+              Buffers: shared hit=13
+              ->  Hash Right Join  (cost=5.52..9.90 rows=1 width=119) (actual time=0.029..0.039 rows=2.00 loops=1)
+                    Hash Cond: (e.evaluation_id = a.evaluation_id)
+                    Buffers: shared hit=9
+                    ->  Seq Scan on evaluations e  (cost=0.00..4.00 rows=100 width=21) (actual time=0.001..0.005 rows=100.00 loops=1)
+                          Buffers: shared hit=3
+                    ->  Hash  (cost=5.50..5.50 rows=1 width=130) (actual time=0.025..0.025 rows=2.00 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                          Buffers: shared hit=6
+                          ->  Hash Join  (cost=2.86..5.50 rows=1 width=130) (actual time=0.017..0.024 rows=2.00 loops=1)
+                                Hash Cond: (i.internship_id = a.internship_id)
+                                Buffers: shared hit=6
+                                ->  Seq Scan on internships i  (cost=0.00..2.50 rows=50 width=79) (actual time=0.002..0.004 rows=50.00 loops=1)
+                                      Buffers: shared hit=2
+                                ->  Hash  (cost=2.85..2.85 rows=1 width=83) (actual time=0.011..0.011 rows=2.00 loops=1)
+                                      Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                      Buffers: shared hit=4
+                                      ->  Seq Scan on applications a  (cost=0.00..2.85 rows=1 width=83) (actual time=0.007..0.010 rows=2.00 loops=1)
+                                            Filter: (student_id = (InitPlan 1).col1)
+                                            Rows Removed by Filter: 66
+                                            Buffers: shared hit=4
+              ->  Index Scan using companies_pkey on companies c  (cost=0.14..0.39 rows=1 width=24) (actual time=0.001..0.001 rows=1.00 loops=2)
+                    Index Cond: (company_id = i.company_id)
+                    Index Searches: 2
+                    Buffers: shared hit=4
+        ->  Index Only Scan using student_profiles_pkey on student_profiles sp  (cost=0.14..4.16 rows=1 width=16) (actual time=0.009..0.010 rows=1.00 loops=2)
+              Index Cond: (student_id = (InitPlan 1).col1)
+              Heap Fetches: 0
+              Index Searches: 2
+              Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=495
+Planning Time: 1.895 ms
+Execution Time: 0.108 ms
+=== R13 run 3 ===
+Sort  (cost=14.58..14.58 rows=1 width=99) (actual time=0.187..0.188 rows=2.00 loops=1)
+  Sort Key: (CASE a.current_stage WHEN 'OFFER'::text THEN 1 WHEN 'INTERVIEW'::text THEN 2 WHEN 'ASSESSMENT'::text THEN 3 WHEN 'APPLIED'::text THEN 4 WHEN 'READY_TO_APPLY'::text THEN 5 WHEN 'PREPARING'::text THEN 6 WHEN 'RESEARCHING'::text THEN 7 WHEN 'SAVED'::text THEN 8 ELSE 9 END), i.deadline
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=22
+  InitPlan 1
+    ->  Limit  (cost=0.00..0.05 rows=1 width=16) (actual time=0.006..0.006 rows=1.00 loops=1)
+          Buffers: shared hit=2
+          ->  Seq Scan on student_profiles  (cost=0.00..5.00 rows=100 width=16) (actual time=0.005..0.005 rows=1.00 loops=1)
+                Buffers: shared hit=2
+  ->  Nested Loop  (cost=5.79..14.52 rows=1 width=99) (actual time=0.125..0.166 rows=2.00 loops=1)
+        Buffers: shared hit=16
+        ->  Nested Loop  (cost=5.65..10.33 rows=1 width=111) (actual time=0.072..0.109 rows=2.00 loops=1)
+              Buffers: shared hit=13
+              ->  Hash Right Join  (cost=5.52..9.90 rows=1 width=119) (actual time=0.066..0.100 rows=2.00 loops=1)
+                    Hash Cond: (e.evaluation_id = a.evaluation_id)
+                    Buffers: shared hit=9
+                    ->  Seq Scan on evaluations e  (cost=0.00..4.00 rows=100 width=21) (actual time=0.003..0.012 rows=100.00 loops=1)
+                          Buffers: shared hit=3
+                    ->  Hash  (cost=5.50..5.50 rows=1 width=130) (actual time=0.056..0.057 rows=2.00 loops=1)
+                          Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                          Buffers: shared hit=6
+                          ->  Hash Join  (cost=2.86..5.50 rows=1 width=130) (actual time=0.041..0.054 rows=2.00 loops=1)
+                                Hash Cond: (i.internship_id = a.internship_id)
+                                Buffers: shared hit=6
+                                ->  Seq Scan on internships i  (cost=0.00..2.50 rows=50 width=79) (actual time=0.005..0.010 rows=50.00 loops=1)
+                                      Buffers: shared hit=2
+                                ->  Hash  (cost=2.85..2.85 rows=1 width=83) (actual time=0.027..0.027 rows=2.00 loops=1)
+                                      Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                      Buffers: shared hit=4
+                                      ->  Seq Scan on applications a  (cost=0.00..2.85 rows=1 width=83) (actual time=0.015..0.023 rows=2.00 loops=1)
+                                            Filter: (student_id = (InitPlan 1).col1)
+                                            Rows Removed by Filter: 66
+                                            Buffers: shared hit=4
+              ->  Index Scan using companies_pkey on companies c  (cost=0.14..0.39 rows=1 width=24) (actual time=0.003..0.003 rows=1.00 loops=2)
+                    Index Cond: (company_id = i.company_id)
+                    Index Searches: 2
+                    Buffers: shared hit=4
+        ->  Index Only Scan using student_profiles_pkey on student_profiles sp  (cost=0.14..4.16 rows=1 width=16) (actual time=0.024..0.024 rows=1.00 loops=2)
+              Index Cond: (student_id = (InitPlan 1).col1)
+              Heap Fetches: 0
+              Index Searches: 2
+              Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=495
+Planning Time: 2.225 ms
+Execution Time: 0.271 ms

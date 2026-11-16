@@ -1,0 +1,33 @@
+=== W05 run 1 ===
+Update on internships  (cost=0.00..2.88 rows=0 width=0) (actual time=0.021..0.022 rows=0.00 loops=1)
+  Buffers: shared hit=2
+  ->  Seq Scan on internships  (cost=0.00..2.88 rows=2 width=72) (actual time=0.021..0.021 rows=0.00 loops=1)
+        Filter: (((status)::text = 'ACTIVE'::text) AND (deadline < CURRENT_DATE))
+        Rows Removed by Filter: 50
+        Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=108
+Planning Time: 0.851 ms
+Execution Time: 0.145 ms
+=== W05 run 2 ===
+Update on internships  (cost=0.00..2.88 rows=0 width=0) (actual time=0.028..0.028 rows=0.00 loops=1)
+  Buffers: shared hit=2
+  ->  Seq Scan on internships  (cost=0.00..2.88 rows=2 width=72) (actual time=0.027..0.027 rows=0.00 loops=1)
+        Filter: (((status)::text = 'ACTIVE'::text) AND (deadline < CURRENT_DATE))
+        Rows Removed by Filter: 50
+        Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=108
+Planning Time: 0.758 ms
+Execution Time: 0.253 ms
+=== W05 run 3 ===
+Update on internships  (cost=0.00..2.88 rows=0 width=0) (actual time=0.024..0.025 rows=0.00 loops=1)
+  Buffers: shared hit=2
+  ->  Seq Scan on internships  (cost=0.00..2.88 rows=2 width=72) (actual time=0.023..0.023 rows=0.00 loops=1)
+        Filter: (((status)::text = 'ACTIVE'::text) AND (deadline < CURRENT_DATE))
+        Rows Removed by Filter: 50
+        Buffers: shared hit=2
+Planning:
+  Buffers: shared hit=108
+Planning Time: 0.735 ms
+Execution Time: 0.184 ms

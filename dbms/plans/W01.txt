@@ -1,0 +1,48 @@
+=== W01 run 1 ===
+Update on student_profiles  (cost=0.05..5.30 rows=0 width=0) (actual time=0.435..0.436 rows=0.00 loops=1)
+  Buffers: shared hit=54
+  InitPlan 1
+    ->  Limit  (cost=0.00..0.05 rows=1 width=16) (actual time=0.007..0.008 rows=1.00 loops=1)
+          Buffers: shared hit=2
+          ->  Seq Scan on student_profiles student_profiles_1  (cost=0.00..5.00 rows=100 width=16) (actual time=0.006..0.006 rows=1.00 loops=1)
+                Buffers: shared hit=2
+  ->  Seq Scan on student_profiles  (cost=0.00..5.25 rows=1 width=748) (actual time=0.049..0.068 rows=1.00 loops=1)
+        Filter: (student_id = (InitPlan 1).col1)
+        Rows Removed by Filter: 99
+        Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=88
+Planning Time: 0.926 ms
+Execution Time: 0.886 ms
+=== W01 run 2 ===
+Update on student_profiles  (cost=0.05..5.30 rows=0 width=0) (actual time=0.283..0.283 rows=0.00 loops=1)
+  Buffers: shared hit=54
+  InitPlan 1
+    ->  Limit  (cost=0.00..0.05 rows=1 width=16) (actual time=0.006..0.006 rows=1.00 loops=1)
+          Buffers: shared hit=2
+          ->  Seq Scan on student_profiles student_profiles_1  (cost=0.00..5.00 rows=100 width=16) (actual time=0.005..0.005 rows=1.00 loops=1)
+                Buffers: shared hit=2
+  ->  Seq Scan on student_profiles  (cost=0.00..5.25 rows=1 width=748) (actual time=0.033..0.050 rows=1.00 loops=1)
+        Filter: (student_id = (InitPlan 1).col1)
+        Rows Removed by Filter: 99
+        Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=88
+Planning Time: 0.532 ms
+Execution Time: 0.427 ms
+=== W01 run 3 ===
+Update on student_profiles  (cost=0.05..5.30 rows=0 width=0) (actual time=0.244..0.245 rows=0.00 loops=1)
+  Buffers: shared hit=54
+  InitPlan 1
+    ->  Limit  (cost=0.00..0.05 rows=1 width=16) (actual time=0.005..0.005 rows=1.00 loops=1)
+          Buffers: shared hit=2
+          ->  Seq Scan on student_profiles student_profiles_1  (cost=0.00..5.00 rows=100 width=16) (actual time=0.004..0.004 rows=1.00 loops=1)
+                Buffers: shared hit=2
+  ->  Seq Scan on student_profiles  (cost=0.00..5.25 rows=1 width=748) (actual time=0.028..0.044 rows=1.00 loops=1)
+        Filter: (student_id = (InitPlan 1).col1)
+        Rows Removed by Filter: 99
+        Buffers: shared hit=6
+Planning:
+  Buffers: shared hit=88
+Planning Time: 0.447 ms
+Execution Time: 0.403 ms

@@ -1,0 +1,147 @@
+=== R03 run 1 ===
+Sort  (cost=10.20..10.21 rows=3 width=206) (actual time=0.228..0.230 rows=2.00 loops=1)
+  Sort Key: p.start_date DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=40
+  ->  GroupAggregate  (cost=10.11..10.17 rows=3 width=206) (actual time=0.209..0.212 rows=2.00 loops=1)
+        Group Key: p.project_id
+        Buffers: shared hit=37
+        ->  Sort  (cost=10.11..10.12 rows=3 width=183) (actual time=0.200..0.201 rows=10.00 loops=1)
+              Sort Key: p.project_id, s.name
+              Sort Method: quicksort  Memory: 27kB
+              Buffers: shared hit=37
+              ->  Nested Loop Left Join  (cost=3.69..10.09 rows=3 width=183) (actual time=0.126..0.163 rows=10.00 loops=1)
+                    Buffers: shared hit=31
+                    ->  Nested Loop Left Join  (cost=3.55..9.39 rows=3 width=190) (actual time=0.120..0.149 rows=10.00 loops=1)
+                          Buffers: shared hit=11
+                          ->  Nested Loop  (cost=3.40..8.86 rows=1 width=174) (actual time=0.040..0.066 rows=2.00 loops=1)
+                                Buffers: shared hit=8
+                                ->  Hash Join  (cost=3.26..8.54 rows=1 width=16) (actual time=0.036..0.060 rows=1.00 loops=1)
+                                      Hash Cond: (sp.user_id = u.user_id)
+                                      Buffers: shared hit=6
+                                      ->  Seq Scan on student_profiles sp  (cost=0.00..5.00 rows=100 width=32) (actual time=0.011..0.021 rows=100.00 loops=1)
+                                            Buffers: shared hit=4
+                                      ->  Hash  (cost=3.25..3.25 rows=1 width=16) (actual time=0.017..0.018 rows=1.00 loops=1)
+                                            Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                            Buffers: shared hit=2
+                                            ->  Seq Scan on users u  (cost=0.00..3.25 rows=1 width=16) (actual time=0.004..0.014 rows=1.00 loops=1)
+                                                  Filter: ((email)::text = 'aravind.sharma@example.edu'::text)
+                                                  Rows Removed by Filter: 99
+                                                  Buffers: shared hit=2
+                                ->  Index Scan using idx_projects_student on projects p  (cost=0.14..0.32 rows=1 width=190) (actual time=0.003..0.004 rows=2.00 loops=1)
+                                      Index Cond: (student_id = sp.student_id)
+                                      Filter: is_featured
+                                      Rows Removed by Filter: 1
+                                      Index Searches: 1
+                                      Buffers: shared hit=2
+                          ->  Index Only Scan using project_skills_pkey on project_skills ps  (cost=0.14..0.49 rows=3 width=32) (actual time=0.040..0.040 rows=5.00 loops=2)
+                                Index Cond: (project_id = p.project_id)
+                                Heap Fetches: 0
+                                Index Searches: 2
+                                Buffers: shared hit=3
+                    ->  Index Scan using skills_pkey on skills s  (cost=0.14..0.23 rows=1 width=25) (actual time=0.001..0.001 rows=1.00 loops=10)
+                          Index Cond: (skill_id = ps.skill_id)
+                          Index Searches: 10
+                          Buffers: shared hit=20
+Planning:
+  Buffers: shared hit=388
+Planning Time: 2.063 ms
+Execution Time: 0.315 ms
+=== R03 run 2 ===
+Sort  (cost=10.20..10.21 rows=3 width=206) (actual time=0.272..0.274 rows=2.00 loops=1)
+  Sort Key: p.start_date DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=40
+  ->  GroupAggregate  (cost=10.11..10.17 rows=3 width=206) (actual time=0.251..0.254 rows=2.00 loops=1)
+        Group Key: p.project_id
+        Buffers: shared hit=37
+        ->  Sort  (cost=10.11..10.12 rows=3 width=183) (actual time=0.240..0.242 rows=10.00 loops=1)
+              Sort Key: p.project_id, s.name
+              Sort Method: quicksort  Memory: 27kB
+              Buffers: shared hit=37
+              ->  Nested Loop Left Join  (cost=3.69..10.09 rows=3 width=183) (actual time=0.164..0.203 rows=10.00 loops=1)
+                    Buffers: shared hit=31
+                    ->  Nested Loop Left Join  (cost=3.55..9.39 rows=3 width=190) (actual time=0.156..0.187 rows=10.00 loops=1)
+                          Buffers: shared hit=11
+                          ->  Nested Loop  (cost=3.40..8.86 rows=1 width=174) (actual time=0.081..0.109 rows=2.00 loops=1)
+                                Buffers: shared hit=8
+                                ->  Hash Join  (cost=3.26..8.54 rows=1 width=16) (actual time=0.074..0.099 rows=1.00 loops=1)
+                                      Hash Cond: (sp.user_id = u.user_id)
+                                      Buffers: shared hit=6
+                                      ->  Seq Scan on student_profiles sp  (cost=0.00..5.00 rows=100 width=32) (actual time=0.041..0.051 rows=100.00 loops=1)
+                                            Buffers: shared hit=4
+                                      ->  Hash  (cost=3.25..3.25 rows=1 width=16) (actual time=0.022..0.022 rows=1.00 loops=1)
+                                            Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                            Buffers: shared hit=2
+                                            ->  Seq Scan on users u  (cost=0.00..3.25 rows=1 width=16) (actual time=0.008..0.017 rows=1.00 loops=1)
+                                                  Filter: ((email)::text = 'aravind.sharma@example.edu'::text)
+                                                  Rows Removed by Filter: 99
+                                                  Buffers: shared hit=2
+                                ->  Index Scan using idx_projects_student on projects p  (cost=0.14..0.32 rows=1 width=190) (actual time=0.005..0.006 rows=2.00 loops=1)
+                                      Index Cond: (student_id = sp.student_id)
+                                      Filter: is_featured
+                                      Rows Removed by Filter: 1
+                                      Index Searches: 1
+                                      Buffers: shared hit=2
+                          ->  Index Only Scan using project_skills_pkey on project_skills ps  (cost=0.14..0.49 rows=3 width=32) (actual time=0.037..0.037 rows=5.00 loops=2)
+                                Index Cond: (project_id = p.project_id)
+                                Heap Fetches: 0
+                                Index Searches: 2
+                                Buffers: shared hit=3
+                    ->  Index Scan using skills_pkey on skills s  (cost=0.14..0.23 rows=1 width=25) (actual time=0.001..0.001 rows=1.00 loops=10)
+                          Index Cond: (skill_id = ps.skill_id)
+                          Index Searches: 10
+                          Buffers: shared hit=20
+Planning:
+  Buffers: shared hit=388
+Planning Time: 2.392 ms
+Execution Time: 0.362 ms
+=== R03 run 3 ===
+Sort  (cost=10.20..10.21 rows=3 width=206) (actual time=0.252..0.254 rows=2.00 loops=1)
+  Sort Key: p.start_date DESC
+  Sort Method: quicksort  Memory: 25kB
+  Buffers: shared hit=40
+  ->  GroupAggregate  (cost=10.11..10.17 rows=3 width=206) (actual time=0.225..0.229 rows=2.00 loops=1)
+        Group Key: p.project_id
+        Buffers: shared hit=37
+        ->  Sort  (cost=10.11..10.12 rows=3 width=183) (actual time=0.214..0.216 rows=10.00 loops=1)
+              Sort Key: p.project_id, s.name
+              Sort Method: quicksort  Memory: 27kB
+              Buffers: shared hit=37
+              ->  Nested Loop Left Join  (cost=3.69..10.09 rows=3 width=183) (actual time=0.127..0.172 rows=10.00 loops=1)
+                    Buffers: shared hit=31
+                    ->  Nested Loop Left Join  (cost=3.55..9.39 rows=3 width=190) (actual time=0.121..0.158 rows=10.00 loops=1)
+                          Buffers: shared hit=11
+                          ->  Nested Loop  (cost=3.40..8.86 rows=1 width=174) (actual time=0.054..0.088 rows=2.00 loops=1)
+                                Buffers: shared hit=8
+                                ->  Hash Join  (cost=3.26..8.54 rows=1 width=16) (actual time=0.048..0.080 rows=1.00 loops=1)
+                                      Hash Cond: (sp.user_id = u.user_id)
+                                      Buffers: shared hit=6
+                                      ->  Seq Scan on student_profiles sp  (cost=0.00..5.00 rows=100 width=32) (actual time=0.017..0.028 rows=100.00 loops=1)
+                                            Buffers: shared hit=4
+                                      ->  Hash  (cost=3.25..3.25 rows=1 width=16) (actual time=0.023..0.023 rows=1.00 loops=1)
+                                            Buckets: 1024  Batches: 1  Memory Usage: 9kB
+                                            Buffers: shared hit=2
+                                            ->  Seq Scan on users u  (cost=0.00..3.25 rows=1 width=16) (actual time=0.007..0.017 rows=1.00 loops=1)
+                                                  Filter: ((email)::text = 'aravind.sharma@example.edu'::text)
+                                                  Rows Removed by Filter: 99
+                                                  Buffers: shared hit=2
+                                ->  Index Scan using idx_projects_student on projects p  (cost=0.14..0.32 rows=1 width=190) (actual time=0.004..0.005 rows=2.00 loops=1)
+                                      Index Cond: (student_id = sp.student_id)
+                                      Filter: is_featured
+                                      Rows Removed by Filter: 1
+                                      Index Searches: 1
+                                      Buffers: shared hit=2
+                          ->  Index Only Scan using project_skills_pkey on project_skills ps  (cost=0.14..0.49 rows=3 width=32) (actual time=0.033..0.034 rows=5.00 loops=2)
+                                Index Cond: (project_id = p.project_id)
+                                Heap Fetches: 0
+                                Index Searches: 2
+                                Buffers: shared hit=3
+                    ->  Index Scan using skills_pkey on skills s  (cost=0.14..0.23 rows=1 width=25) (actual time=0.001..0.001 rows=1.00 loops=10)
+                          Index Cond: (skill_id = ps.skill_id)
+                          Index Searches: 10
+                          Buffers: shared hit=20
+Planning:
+  Buffers: shared hit=388
+Planning Time: 2.618 ms
+Execution Time: 0.382 ms

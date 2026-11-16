@@ -1,0 +1,69 @@
+=== W02 run 1 ===
+Insert on student_skills  (cost=1.49..1.50 rows=0 width=0) (actual time=0.287..0.288 rows=0.00 loops=1)
+  Conflict Resolution: UPDATE
+  Conflict Arbiter Indexes: student_skills_pkey
+  Tuples Inserted: 0
+  Conflicting Tuples: 1
+  Buffers: shared hit=44
+  InitPlan 1
+    ->  Limit  (cost=0.00..0.05 rows=1 width=16) (actual time=0.011..0.011 rows=1.00 loops=1)
+          Buffers: shared hit=2
+          ->  Seq Scan on student_profiles  (cost=0.00..5.00 rows=100 width=16) (actual time=0.010..0.010 rows=1.00 loops=1)
+                Buffers: shared hit=2
+  InitPlan 2
+    ->  Seq Scan on skills  (cost=0.00..1.44 rows=1 width=16) (actual time=0.006..0.008 rows=1.00 loops=1)
+          Filter: ((slug)::text = 'postgresql'::text)
+          Rows Removed by Filter: 34
+          Buffers: shared hit=1
+  ->  Result  (cost=0.00..0.01 rows=1 width=189) (actual time=0.025..0.025 rows=1.00 loops=1)
+        Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=181
+Planning Time: 0.731 ms
+Execution Time: 0.371 ms
+=== W02 run 2 ===
+Insert on student_skills  (cost=1.49..1.50 rows=0 width=0) (actual time=0.258..0.259 rows=0.00 loops=1)
+  Conflict Resolution: UPDATE
+  Conflict Arbiter Indexes: student_skills_pkey
+  Tuples Inserted: 0
+  Conflicting Tuples: 1
+  Buffers: shared hit=42
+  InitPlan 1
+    ->  Limit  (cost=0.00..0.05 rows=1 width=16) (actual time=0.008..0.008 rows=1.00 loops=1)
+          Buffers: shared hit=2
+          ->  Seq Scan on student_profiles  (cost=0.00..5.00 rows=100 width=16) (actual time=0.007..0.007 rows=1.00 loops=1)
+                Buffers: shared hit=2
+  InitPlan 2
+    ->  Seq Scan on skills  (cost=0.00..1.44 rows=1 width=16) (actual time=0.008..0.010 rows=1.00 loops=1)
+          Filter: ((slug)::text = 'postgresql'::text)
+          Rows Removed by Filter: 34
+          Buffers: shared hit=1
+  ->  Result  (cost=0.00..0.01 rows=1 width=189) (actual time=0.025..0.025 rows=1.00 loops=1)
+        Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=181
+Planning Time: 1.269 ms
+Execution Time: 0.347 ms
+=== W02 run 3 ===
+Insert on student_skills  (cost=1.49..1.50 rows=0 width=0) (actual time=1.039..1.043 rows=0.00 loops=1)
+  Conflict Resolution: UPDATE
+  Conflict Arbiter Indexes: student_skills_pkey
+  Tuples Inserted: 0
+  Conflicting Tuples: 1
+  Buffers: shared hit=42
+  InitPlan 1
+    ->  Limit  (cost=0.00..0.05 rows=1 width=16) (actual time=0.019..0.020 rows=1.00 loops=1)
+          Buffers: shared hit=2
+          ->  Seq Scan on student_profiles  (cost=0.00..5.00 rows=100 width=16) (actual time=0.018..0.019 rows=1.00 loops=1)
+                Buffers: shared hit=2
+  InitPlan 2
+    ->  Seq Scan on skills  (cost=0.00..1.44 rows=1 width=16) (actual time=0.011..0.014 rows=1.00 loops=1)
+          Filter: ((slug)::text = 'postgresql'::text)
+          Rows Removed by Filter: 34
+          Buffers: shared hit=1
+  ->  Result  (cost=0.00..0.01 rows=1 width=189) (actual time=0.042..0.043 rows=1.00 loops=1)
+        Buffers: shared hit=3
+Planning:
+  Buffers: shared hit=181
+Planning Time: 1.026 ms
+Execution Time: 1.538 ms
