@@ -488,3 +488,92 @@ SELECT
 FROM evaluations e
 ORDER BY e.evaluated_at ASC
 LIMIT 20;
+
+-- @W01
+-- W01: WRITE - Update Student Career Profile Headline and Target Role
+UPDATE student_profiles
+SET 
+    headline = 'Full Stack Software Engineer & Distributed Systems Enthusiast',
+    target_role = 'Backend Systems Intern',
+    updated_at = CURRENT_TIMESTAMP
+WHERE student_id = (SELECT student_id FROM student_profiles LIMIT 1);
+
+-- @W02
+-- W02: WRITE - Upsert Student Technical Skill Proficiency
+INSERT INTO student_skills (
+    student_id,
+    skill_id,
+    proficiency,
+    verification_source,
+    years_experience,
+    is_verified,
+    created_at
+)
+VALUES (
+    (SELECT student_id FROM student_profiles LIMIT 1),
+    (SELECT skill_id FROM skills WHERE slug = 'postgresql'),
+    'ADVANCED',
+    'ASSESSMENT',
+    2.5,
+    TRUE,
+    CURRENT_TIMESTAMP
+)
+ON CONFLICT (student_id, skill_id) DO UPDATE SET
+    proficiency = EXCLUDED.proficiency,
+    verification_source = EXCLUDED.verification_source,
+    years_experience = EXCLUDED.years_experience,
+    is_verified = EXCLUDED.is_verified;
+
+-- @W03
+-- W03: WRITE - Advance Application Pipeline Stage and Record Audit Activity
+WITH updated_app AS (
+    UPDATE applications
+    SET 
+        current_stage = 'APPLIED',
+        applied_date = CURRENT_DATE,
+        updated_at = CURRENT_TIMESTAMP
+    WHERE application_id = (SELECT application_id FROM applications WHERE current_stage = 'READY_TO_APPLY' LIMIT 1)
+    RETURNING application_id, 'READY_TO_APPLY'::VARCHAR(30) AS old_stage, current_stage AS new_stage
+)
+INSERT INTO application_activities (
+    activity_id,
+    application_id,
+    activity_type,
+    old_stage,
+    new_stage,
+    notes,
+    event_timestamp
+)
+SELECT 
+    gen_random_uuid(),
+    application_id,
+    'STAGE_CHANGE',
+    old_stage,
+    new_stage,
+    'Application submitted via official company career portal',
+    CURRENT_TIMESTAMP
+FROM updated_app;
+
+-- @W04
+-- W04: WRITE - Complete Daily Preparation Roadmap Task
+UPDATE roadmap_tasks
+SET 
+    is_completed = TRUE,
+    completed_at = CURRENT_TIMESTAMP
+WHERE task_id = (
+    SELECT task_id 
+    FROM roadmap_tasks 
+    WHERE is_completed = FALSE 
+    ORDER BY day_number ASC, task_order ASC 
+    LIMIT 1
+);
+
+-- @W05
+-- W05: WRITE - Nightly Batch Expiration of Past-Deadline Internships
+UPDATE internships
+SET 
+    status = 'EXPIRED',
+    updated_at = CURRENT_TIMESTAMP
+WHERE status = 'ACTIVE' 
+  AND deadline < CURRENT_DATE;
+
